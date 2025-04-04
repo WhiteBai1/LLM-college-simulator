@@ -44,7 +44,7 @@ p {
 button{
     font-size: 25px;
     border-radius: 25%;
-    background-image: url("./蓝色按钮.png");
+    background-image: url("blue-button.png");
     font-style: italic;
     color: black;
     padding: 15px 32px;
