@@ -3,7 +3,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url("../pictures/login background.png") no-repeat;
+    background-image: url("../pictures/login-background.png") ;
+    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
@@ -66,7 +67,6 @@ body {
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
     top: -5px;
-
 }
 
 .input-box input {
