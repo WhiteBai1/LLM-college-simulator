@@ -11,7 +11,7 @@ p {
     font-family: 楷体;
     font-weight: bold;
     position: absolute;
-    margin-top: 10%;
+    top: 10%;
     left: 25%;
 }
 
@@ -41,7 +41,17 @@ p {
     display: block;
 }
 
-button{
+.nextBtn, .lastBtn{
+    font-size: 25px;
+    border-radius: 25%;
+    background-image: url("yellow-button.png");
+    font-style: italic;
+    color: black;
+    padding: 15px 32px;
+    width: 230px;
+}
+
+.question .choice{
     font-size: 25px;
     border-radius: 25%;
     background-image: url("blue-button.png");
@@ -49,6 +59,20 @@ button{
     color: black;
     padding: 15px 32px;
     width: 230px;
+}
+
+.question .choice.active{
+    font-weight: bold;
+    border-color: yellow;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-size: 25px;
+    border-radius: 25%;
+    background-image: url("blue-button.png");
+    font-style: italic;
+    color: black;
+    padding: 15px 32px;
+    width: 230px;
+    border-width: thick;
 }
 
 button:hover{
@@ -66,4 +90,16 @@ button:active{
 
 .question.active {
     display: block;
+}
+
+.selectionA{
+    position: absolute;
+    top: 20%;
+    left: 30%;
+}
+
+.selectionB{
+    position: absolute;
+    top: 30%;
+    left: 30%;
 }

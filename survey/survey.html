@@ -7,91 +7,93 @@
 </head>
 <body>
     <div class="question active" id="q0">
-        <p>温馨提示：我们将会根据你的个人情况给你的基础属性赋值！请如实填写哦</p>
+        <p>温馨提示：我们将会根据你的个人情况给你的基础属性赋值！请如实回答哦</p>
     </div>
 
     <div class="question" id="q1">
-        <p>Q1:</p>
+        <p>Q1:你的性别是：</p>
+        <button class="choice selectionA">A.男</button>
+        <button class="choice selectionB">B.女</button>
     </div>
 
     <div class="question" id="q2">
         <p>Q2:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q3">
         <p>Q3:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q4">
         <p>Q4:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q5">
         <p>Q5:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q6">
         <p>Q6:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q7">
         <p>Q7:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q8">
         <p>Q8:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q9">
         <p>Q9:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q10">
         <p>Q10:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q11">
         <p>Q11:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q12">
         <p>Q12:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q13">
         <p>Q13:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q14">
         <p>Q14:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q15">
         <p>Q15:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q16">
         <p>Q16:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q17">
         <p>Q17:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q18">
         <p>Q18:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q19">
         <p>Q19:</p>
     </div>
 
-    <div class="question" id="q2">
+    <div class="question" id="q20">
         <p>Q20:</p>
     </div>
 
-    <button  class="nextBtn" id="nextBtn">开始作答</button>
-    <button  class="lastBtn" id="lastBtn">上一题</button>
+    <button  class="nextBtn" id="nextBtn">Start</button>
+    <button  class="lastBtn" id="lastBtn">Last</button>
     <span class="progress">0/20</span>
 
     <script>
@@ -100,6 +102,8 @@
         const nextBtn = document.getElementById('nextBtn');
         const lastBtn = document.getElementById('lastBtn');
         const progress = document.querySelector('.progress');
+        const divq1 = document.getElementById('q1')
+        const q1choice = divq1.querySelectorAll('.choice')
 
         nextBtn.addEventListener('click', () => {
             if (currentQuestion < questions.length - 1 ) {
@@ -107,15 +111,16 @@
                 currentQuestion++;
                 progress.textContent=currentQuestion+'/20';
                 questions[currentQuestion].classList.add('active');
-                nextBtn.textContent='下一题';
+                nextBtn.textContent='Next';
                 if(currentQuestion > 1){
                     lastBtn.classList.add('active');
                 }
                 if (currentQuestion === questions.length - 1) {
-                    nextBtn.textContent = '提交';
+                    nextBtn.textContent = 'Submit';
                 }
             }
         });
+
 
         lastBtn.addEventListener('click', () => {
             if (currentQuestion === questions.length - 1) {
@@ -129,6 +134,18 @@
             progress.textContent=currentQuestion+'/20';
             questions[currentQuestion].classList.add('active');
         });
+
+        //问题1
+        let q1activeChoice = null;
+        q1choice.forEach(button => {
+            button.addEventListener('click', () => {
+                if(button ===q1activeChoice) return;
+                q1choice.forEach(button => button.classList.remove('active'));
+                button.classList.add('active');
+                q1activeChoice = button;
+            });
+        });
+
     </script>
 </body>
 </html>
