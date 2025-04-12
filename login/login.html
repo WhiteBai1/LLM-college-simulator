@@ -5,10 +5,18 @@
     <title>Login</title>
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="../Bootstrap-fonts-and-icons/bootstrap-icons.css">
+    <script src="login.js" defer></script>
 </head>
 <body>
     <img src="../pictures/school-badge.png" alt="哈尔滨工业大学" class="logo">
-    <div class="wrapper">
+    <div class="welcome">
+        <h1>
+            Welcome to LLM college simulator!
+        </h1>
+        <button onclick="logining()">login</button>
+    </div>
+    <div class="blur-overlay" id="blur-overlay"></div>
+    <div class="wrapper" id="wrapper">
         <div class="form-box login">
             <h2>Login</h2>
             <form action="#">
