@@ -2,7 +2,7 @@
 
 from utils.llm import generate_llm_response
 
-# 角色配置模板
+
 ROLE_SCENES = {
     "teacher": {
         "role": "大学老师",
