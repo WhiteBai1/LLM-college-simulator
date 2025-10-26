@@ -1,0 +1,100 @@
+---
+status:
+  - id: firstYearOrientation
+    duration: 5
+    effects:
+      - attributeModifiers:
+          - target: player.learnBoost
+            type: Absolute
+            amount: +8
+
+  - id: midtermsPressure
+    duration: 3
+    effects:
+      - attributeModifiers:
+          - target: player.learnBoost
+            type: Absolute
+            amount: +3
+          - target: player.healthBoost
+            type: Absolute
+            amount: -6
+
+  - id: summerInternship
+    duration: 8
+    effects:
+      - attributeModifiers:
+          - target: player.healthBoost
+            type: Absolute
+            amount: +4
+
+  - id: successInternship
+    duration: 8
+    effects:
+      - attributeModifiers:
+          - target: player.learnBoost
+            type: Absolute
+            amount: +5
+          - target: player.healthBoost
+            type: Absolute
+            amount: -6
+          
+  - id: failInternship
+    duration: 2
+    effects:
+      - attributeModifiers:
+          - target: player.technicIntention
+            type: Absolute
+            amount: -3
+          - target: player.learnBoost
+            type: Absolute
+            amount: -5
+            
+  - id: successResearch
+    duration: 8
+    effects:
+      - attributeModifiers:
+          - target: player.gradeBoost
+            type: Absolute
+            amount: +8
+          - target: player.learnBoost
+            type: Absolute
+            amount: +5
+          - target: player.healthBoost
+            type: Absolute
+            amount: -6
+
+  - id: failResearch
+    duration: 2
+    effects:
+      - attributeModifiers:
+          - target: player.academicIntention
+            type: Absolute
+            amount: -3
+          - target: player.learnBoost
+            type: Absolute
+            amount: -5
+
+  - id: burnout
+    duration: Infinity
+    effects:
+      - attributeModifiers:
+          - target: player.healthBoost
+            type: Absolute
+            amount: -15
+          - target: player.learnBoost
+            type: Absolute
+            amount: -10
+          - target: player.EQBoost
+            type: Absolute
+            amount: -5
+            
+  - id: finalExamStress
+    duration: 2
+    effects:
+      - attributeModifiers:
+          - target: player.gradeBoost
+            type: Absolute
+            amount: -25
+          - target: player.healthBoost
+            type: Absolute
+            amount: -15

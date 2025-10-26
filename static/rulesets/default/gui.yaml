@@ -1,0 +1,68 @@
+---
+statsBar:
+  items:
+
+  - text: ui.learnBoost
+    side: left
+    updateTrigger:
+      variables: ["player.learnBoost"]
+    conditionalStyles:
+      - condition: player.learnBoost >= 80
+        styleClasses: ["great"]
+      - condition: player.learnBoost >= 50 && player.learnBoost < 80
+        styleClasses: ["normal"]
+      - condition: player.learnBoost < 50
+        styleClasses: ["warning"]
+
+ 
+  - text: ui.health
+    side: left
+    updateTrigger:
+      variables: ["player.healthBoost"]
+    conditionalStyles:
+      - condition: player.healthBoost > 70
+        styleClasses: ["normal"]
+      - condition: player.healthBoost <= 70 && player.healthBoost > 40
+        styleClasses: ["warning"]
+      - condition: player.healthBoost <= 40
+        styleClasses: ["critical"]
+
+  - text: ui.timeMeter
+    side: right
+    updateTrigger:
+      variables: ["year", "semester","week"]
+
+
+messageWindow:
+  typewriterSpeed: 25 
+
+
+statusList:
+  title: ui.status
+
+# itemList:
+#   title: ui.items
+#   raritySpecificStyles:
+#     - minRarity: 10
+#       styleClasses: ["r_legendary"]
+#     - minRarity: 6
+#       maxRarity: 9
+#       styleClasses: ["r_rare"]
+#     - minRarity: 3
+#       maxRarity: 5
+#       styleClasses: ["r_uncommon"]
+
+
+footer:
+  preamble:
+  buttons:
+    - text: ui.github
+      url: https://github.com/NetherXiaoYu/phd-game
+    - text: ui.helpButton
+      messageTitle: ui.helpTitle
+      message: "大学四年，你会如何平衡学习、社交与生活？"
+      confirmText: ui.ok
+    - text: ui.creditsButton
+      messageTitle: "制作团队"
+      message: "项目立项：大一立项\n代码开发：NetherXiaoYu 团队\nAI生成支持：ChatGPT-5"
+      confirmText: ui.ok

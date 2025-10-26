@@ -1,0 +1,68 @@
+---
+#ui
+ui.ok: Ok.
+ui.items: "Items:"
+ui.status: "Status:"
+ui.github: GitHub
+ui.privacyNoticeButton: Privacy Notice
+ui.privacyNoticeTitle: Privacy Notice
+ui.privacyNoticeContent: This webpage is hosted under research.wmz.ninja, which uses Google Analytics (which uses cookies) to collect basic anonymous data for website statistics. You are free to disable cookies or enable Do Not Track.
+ui.helpButton: Help
+ui.helpTitle: Help
+ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
+ui.learnBoost: learnBoost
+ui.health: health
+ui.timeMeter: Week {{week}}
+
+# beginning
+messsage.beginningCollege: "你踏入了大学校园，新的旅程即将开始！"
+message.ok: "好的"
+message.great: "太棒了！" 
+message.cool: "真不错！"
+message.excited: "我超期待！"
+message.encouraging: "继续加油！"
+message.sucks: "真糟糕……"
+message.sad: "有点丧。"
+message.unfortunate: "有点倒霉。"
+message.party: "庆祝一下！"
+message.restart: "重新开始吧。"
+
+# weeklyGoal
+message.weeklyGoal: "这周你打算怎么过？"
+message.goalStudy: "专心学习，提高成绩。"
+message.goalStudyResult: "你认真上课、复习知识，学习效率提升了。"
+message.goalRest: "适当放松，调整状态。"
+message.goalRestResult: "你休息充分，精神焕发。"
+message.goalResearch: "研究技术/项目。"
+message.goalResearchResult: "你的技术得到了提升。"
+message.goalResearchBreakthrough: "做的lab让你的能力大大提升。"
+message.goalResearchTired: "连续学习让你有点疲惫，需要注意休息。"
+message.goalCrazyPlay: "和朋友们疯狂玩乐，释放压力。"
+message.goalCrazyPlayResult: "你度过了愉快的一周，但学习有所落下。"
+message.goalCrazyPlayTooMuch: "玩得太嗨了！身体有点吃不消。"
+
+# ExamEvent
+message.midtermComing: "期中考试临近，你感到一丝紧张。"
+message.midterm: "期中考试中..."
+message.examExcellent: "你考得非常好，成为班上的学霸！"
+message.examPassed: "考试通过，还不错！"
+message.examFailed: "这次考试没考好，下次要加油。"
+
+#summerEvent
+message.summerEvent: "暑假来了，你打算怎么安排？"
+message.choiceInternship: "申请暑期实习，锻炼技能。"
+message.internshipSuccess: "你顺利拿到实习机会，在公司学到了很多。"
+message.internshipFailed: "遗憾，申请没通过，但也积累了经验。"
+message.choiceResearch: "留校参加科研项目。"
+message.researchSuccess: "你的研究成果得到了导师的肯定！"
+message.researchFailed: "研究进展不顺利，但也算有了新的体会。"
+
+  
+message.bounceBack: "休息充足后，你重新找回了学习的动力！"
+message.burnout: "长时间高压学习让你感到筋疲力尽。"
+
+  #end
+message.endReport: "你的大学生活画上句号，AI正在生成你的总结报告……"
+message.end: "大学四年转瞬即逝，你收获了宝贵的知识和经验。祝贺你顺利毕业，开启人生新篇章！"
+
+  

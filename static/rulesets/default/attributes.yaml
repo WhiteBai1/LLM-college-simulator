@@ -1,0 +1,14 @@
+---
+attributes:
+- id: player.learnBoost
+  baseValue: 60
+- id: player.healthBoost
+  baseValue: 100
+- id: player.EQBoost
+  baseValue: 60
+- id: player.gradeBoost
+  baseValue: 60
+- id: player.academicIntention
+  baseValue: 0
+- id: player.technicIntention
+  baseValue: 0
