@@ -1341,3 +1341,262 @@ export class EANPCChatAction /* adapter for npcChat */ {
         });
     }
 }
+
+// ...existing code...
+import { getGlobalLLMProvider } from '../llm/llmProvider';
+// ...existing code...
+
+// 新增：期中/期末考前 — 学长（LLM）传授经验并与玩家做三选交互，然后给出解答
+export class EAExamPrep extends EventAction {
+    static ID = 'EAExamPrep';
+
+    private _npcId: number;
+    private _promptKey?: string;
+    private _npcName?: string;
+
+    constructor(npcId: number, promptKey?: string, npcName?: string) {
+        super();
+        this._npcId = npcId;
+        this._promptKey = promptKey;
+        this._npcName = npcName;
+    }
+
+    static fromJSONObject(obj: any, context: EventActionDeserializationContext): EventAction {
+        if (obj['npcId'] == undefined) throw new Error('EAExamPrep: npcId missing.');
+        return new EAExamPrep(Number(obj['npcId']), obj['prompt'], obj['npcName']);
+    }
+
+    async execute(context: EventActionExecutionContext): Promise<EventActionResult> {
+        const npcName = this._npcName || '学长';
+        await context.actionProxy.displayMessage(`${npcName}正在准备...`, 'OK');
+
+        const llm = getGlobalLLMProvider();
+        const playerMajor = '计算机科学'
+        const examPhase = this._promptKey || '期中/期末';
+
+        const basePrompt = `
+你是一个经验丰富的学长，正在给即将到来的${examPhase}考试传授复习与应考经验。
+先用一段简短、实用的建议开场（2-4 句），然后请玩家告诉你他的疑惑，并列出 3 个可供选择的疑惑项（按 1/2/3 编号，每项一句话）。
+最后不要给出答案，只列出选项等待玩家选择。学生专业: ${playerMajor || '未知'}。
+请只返回可读文本（第一段为开场建议，随后换行列出编号选项）。
+`.trim();
+
+        // 调用 LLM（优先 chatWithNPC）
+        try {
+            const timeoutMs = 15000;
+            const llmPromise: Promise<string> = (llm as any).chatWithNPC
+                ? (llm as any).chatWithNPC(this._npcId, basePrompt, {})
+                : llm.generate(basePrompt, {});
+
+            const reply = await Promise.race<string>([
+                llmPromise,
+                new Promise<string>((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), timeoutMs))
+            ]);
+
+            // 解析开场与选项
+            const lines = (reply || '').split(/\r?\n/).map(l => l.trim()).filter(l => l);
+            // 找编号选项（1/2/3 开头）或以 - / • 等的行
+            const options: string[] = [];
+            const introLines: string[] = [];
+            for (const line of lines) {
+                const m = line.match(/^\s*(?:\d+[\).\、]|[-•]\s*)(.*)$/);
+                if (m && m[1]) {
+                    if (options.length < 3) options.push(m[1].trim());
+                } else {
+                    // 若已开始收集 options，则把非编号行当作继续选项文本
+                    if (options.length > 0 && options.length < 3) {
+                        options[options.length - 1] += (' ' + line);
+                    } else {
+                        introLines.push(line);
+                    }
+                }
+            }
+
+            // 若解析不到选项，试着从 reply 的后半段取三行作为选项
+            if (options.length === 0) {
+                const tail = lines.slice(-3);
+                for (const t of tail) {
+                    if (t) options.push(t);
+                }
+            }
+
+            // 保证至少三个候选项
+            while (options.length < 3) options.push('我想要更多复习建议。');
+
+            const intro = introLines.join(' ');
+
+            // 显示选项并等待玩家选择（假定 actionProxy.displayChoices 返回所选索引 0-based）
+            // 构造 [string, number][] 选项数组
+            const choiceTuples: Array<[string, number]> = options.map((opt, idx) => [opt, idx]);
+            const selected = await context.actionProxy.displayChoices(intro || `${npcName}：请选择你最想问的问题：`, choiceTuples, 'OK');
+
+            const selIndex = (typeof selected === 'number') ? selected : Number(selected) || 0;
+            const choosenText = options[Math.max(0, Math.min(selIndex, options.length - 1))];
+
+            // 再次调用 LLM 根据所选项给出详细解答
+            const detailPrompt = `
+你是经验丰富的学长。玩家选择的问题是：${choosenText}
+请给出针对该问题的详细、可操作的解答（2-6 段或若干要点），并在最后给出一句简短的鼓励语。
+注意回复要面向考试复习与应考策略，结合实例说明。
+`.trim();
+
+            const detailPromise: Promise<string> = (llm as any).chatWithNPC
+                ? (llm as any).chatWithNPC(this._npcId, detailPrompt, {})
+                : llm.generate(detailPrompt, {});
+
+            const detailReply = await Promise.race<string>([
+                detailPromise,
+                new Promise<string>((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), timeoutMs))
+            ]);
+
+            await context.actionProxy.displayMessage(`${npcName}: ${detailReply}`, 'OK');
+
+        } catch (err) {
+            console.error('EAExamPrep error:', err);
+            await context.actionProxy.displayMessage(`${npcName}: 抱歉，我现在无法给出建议。`, 'OK');
+        }
+
+        return EventActionResult.Ok;
+    }
+}
+
+
+// 新增：面试事件 — 面试官（LLM）问问题、生成三选项，玩家选项会影响 interview.score
+export class EAInterview extends EventAction {
+    static ID = 'EAInterview';
+
+    private _npcId: number;
+    private _npcName?: string;
+
+    constructor(npcId: number, npcName?: string) {
+        super();
+        this._npcId = npcId;
+        this._npcName = npcName;
+    }
+
+    static fromJSONObject(obj: any, context: EventActionDeserializationContext): EventAction {
+        if (obj['npcId'] == undefined) throw new Error('EAInterview: npcId missing.');
+        return new EAInterview(Number(obj['npcId']), obj['npcName']);
+    }
+
+    async execute(context: EventActionExecutionContext): Promise<EventActionResult> {
+        const interviewer = this._npcName || '面试官';
+        await context.actionProxy.displayMessage(`${interviewer}正在准备面试问题...`, 'OK');
+
+        const llm = getGlobalLLMProvider();
+        const major = '计算机科学';
+
+        const basePrompt = `
+你是公司面试官，正在为一名${major}专业的学生进行面试。请先给出一段简短的自我介绍（作为面试官），随后提出一个面试问题（聚焦专业能力、算法/工程/系统设计或团队协作等核心竞争力），并给出 3 个可供玩家选择的回答方向（编号 1/2/3）。
+请只输出面试官的自我介绍、问题与三项编号选项（便于玩家选择）。
+`.trim();
+
+        try {
+            const timeoutMs = 15000;
+            const llmPromise: Promise<string> = (llm as any).chatWithNPC
+                ? (llm as any).chatWithNPC(this._npcId, basePrompt, {})
+                : llm.generate(basePrompt, {});
+
+            const reply = await Promise.race<string>([
+                llmPromise,
+                new Promise<string>((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), timeoutMs))
+            ]);
+
+            // 解析选项（与前一致）
+            const lines = (reply || '').split(/\r?\n/).map(l => l.trim()).filter(l => l);
+            const options: string[] = [];
+            const introLines: string[] = [];
+            for (const line of lines) {
+                const m = line.match(/^\s*(?:\d+[\).\、]|[-•]\s*)(.*)$/);
+                if (m && m[1]) {
+                    if (options.length < 3) options.push(m[1].trim());
+                } else {
+                    if (options.length > 0 && options.length < 3) {
+                        options[options.length - 1] += (' ' + line);
+                    } else {
+                        introLines.push(line);
+                    }
+                }
+            }
+            if (options.length === 0) {
+                const tail = lines.slice(-3);
+                for (const t of tail) if (t) options.push(t);
+            }
+            while (options.length < 3) options.push('我会诚实回答。');
+
+            const intro = introLines.join(' ');
+
+            const choiceTuples: Array<[string, number]> = options.map((opt, idx) => [opt, idx]);
+            const selected = await context.actionProxy.displayChoices(intro || `${interviewer}：请选择你的回答方向：`, choiceTuples, 'OK');
+            const selIndex = (typeof selected === 'number') ? selected : Number(selected) || 0;
+            const choiceText = options[Math.max(0, Math.min(selIndex, options.length - 1))];
+
+            // 请求 LLM 给出面试官的针对性评价与建议，并返回对分数的建议增减（这里前端自行映射分数变化）
+            const evalPrompt = `
+你是面试官。应聘者选择的回答方向是：${choiceText}
+请以面试官的口吻给出对该回答的评价（中肯、简洁），并给出对面试分数的建议（在 -10 到 +10 之间的整数），格式要求：
+评价文本：<你的评价文本>
+分数变化：<整数>
+只返回这两行，便于程序解析。
+`.trim();
+
+            const evalPromise: Promise<string> = (llm as any).chatWithNPC
+                ? (llm as any).chatWithNPC(this._npcId, evalPrompt, {})
+                : llm.generate(evalPrompt, {});
+
+            const evalReply = await Promise.race<string>([
+                evalPromise,
+                new Promise<string>((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), timeoutMs))
+            ]);
+
+            // 尝试从 evalReply 中抽取分数变化
+            let scoreDelta = 0;
+            const m = evalReply.match(/分数变化\s*[:：]\s*([+-]?\d+)/);
+            if (m) {
+                scoreDelta = Number(m[1]) || 0;
+            } else {
+                // 兜底：按选择索引给分差，鼓励更主动/技术型的回答
+                scoreDelta = selIndex === 0 ? 8 : (selIndex === 1 ? 4 : 0);
+            }
+
+            // 更新变量 interview.score（如果没有则设为 scoreDelta）
+             let curNum = 0;
+                try {
+                    let cur: any;
+                    if (typeof context.variableStore.getVar === 'function') {
+                        // 不要求存在，避免抛错
+                        cur = context.variableStore.getVar('interview.score', false);
+                    } 
+                     else {
+                        cur = undefined;
+                    }
+                    curNum = (typeof cur === 'number') ? cur : (Number(cur) || 0);
+                } catch (e) {
+                    // 如果 getVar 仍抛异常，兜底为 0
+                    console.warn('EAInterview: failed to read interview.score, defaulting to 0', e);
+                    curNum = 0;
+                }
+
+                const newScore = curNum + scoreDelta;
+
+                // 写回变量，优先使用 setVar，再退回到通用 set
+                if (typeof context.variableStore.setVar === 'function') {
+                    context.variableStore.setVar('interview.score', newScore);
+                } 
+                else {
+                    console.warn('EAInterview: variableStore has no setter API. score not saved:', newScore);
+                }
+
+            // 显示评价与分数变化
+            await context.actionProxy.displayMessage(`${interviewer}：${evalReply}`, 'OK');
+
+        } catch (err) {
+            console.error('EAInterview error:', err);
+            await context.actionProxy.displayMessage(`${interviewer}：抱歉，面试暂时无法继续。`, 'OK');
+        }
+
+        return EventActionResult.Ok;
+    }
+}
+
+// ...existing code...

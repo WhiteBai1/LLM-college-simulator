@@ -10,12 +10,15 @@ ui.privacyNoticeContent: This webpage is hosted under research.wmz.ninja, which 
 ui.helpButton: Help
 ui.helpTitle: Help
 ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
-ui.learnBoost: learnBoost
-ui.health: health
+ui.health: health:{{player.healthBoost}}
 ui.timeMeter: Week {{week}}
+ui.learnBoost: learnBoost:{{player.learnBoost}}
+
+
+#status
 
 # beginning
-messsage.beginningCollege: "你踏入了大学校园，新的旅程即将开始！"
+message.beginningCollege: "你踏入了大学校园，新的旅程即将开始！"
 message.ok: "好的"
 message.great: "太棒了！" 
 message.cool: "真不错！"
@@ -47,6 +50,8 @@ message.midterm: "期中考试中..."
 message.examExcellent: "你考得非常好，成为班上的学霸！"
 message.examPassed: "考试通过，还不错！"
 message.examFailed: "这次考试没考好，下次要加油。"
+message.FinaltermComing: "期末考试要来了，要准备复习了。"
+message.Finalterm: "期末考试中..."
 
 #summerEvent
 message.summerEvent: "暑假来了，你打算怎么安排？"
@@ -60,9 +65,9 @@ message.researchFailed: "研究进展不顺利，但也算有了新的体会。"
   
 message.bounceBack: "休息充足后，你重新找回了学习的动力！"
 message.burnout: "长时间高压学习让你感到筋疲力尽。"
+message.newterm: "新的学期开始，你有什么新的计划？"
 
   #end
 message.endReport: "你的大学生活画上句号，AI正在生成你的总结报告……"
-message.end: "大学四年转瞬即逝，你收获了宝贵的知识和经验。祝贺你顺利毕业，开启人生新篇章！"
-
+message.end: "结束了。"
   

@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/js-yaml": "^4.0.5",
     "@types/seedrandom": "^3.0.5",
+    "dotenv": "^17.2.3",
     "js-yaml": "^4.1.0",
     "node-fetch": "^2.7.0",
     "query-string": "^8.1.0",

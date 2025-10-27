@@ -12,7 +12,8 @@ import { AleaRandomSource, RandomSource } from './utils/random';
 import { EndGameState } from './endGameState';
 import { AttributeRegistry } from './effect/attribute';
 import { EANPCChat } from './event/npcChat';
-
+import { EAExamPrep } from './event/actions';
+import { EAInterview } from './event/actions';
 export interface GameConfig {
     initialRandomSeed?: string;
     attributeDefinitionUrl?: string;
@@ -232,6 +233,8 @@ export class GameEngine {
         this._actionFactory.registerDeserializer(EAEnableEvents);
         this._actionFactory.registerDeserializer(EADisableEvents);
         this._actionFactory.registerDeserializer({ ID: EANPCChatAction.ID, fromJSONObject: EANPCChatAction.fromJSONObject });
+        this._actionFactory.registerDeserializer(EAExamPrep);
+       this._actionFactory.registerDeserializer(EAInterview);
         // Condition factory
         this._conditionFactory.registerDeserializer(ECExpression);
         this._conditionFactory.registerDeserializer(ECNot);

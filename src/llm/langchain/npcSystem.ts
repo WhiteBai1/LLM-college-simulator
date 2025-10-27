@@ -60,6 +60,26 @@ class NPCSystem {
         personality: "活泼、好奇、有点害羞",
         likes: ["游戏", "音乐", "运动"],
         dislikes: ["考试", "早起"],
+      },
+      {
+        id: 3,
+        name:"学长",
+        age:22,
+        gender:"男",
+        occupation:"学生",
+        personality:"严肃、认真、有条理",
+        likes:["学习","阅读","思考"],
+        dislikes:["玩手机","睡懒觉"]
+      },
+      {
+        id:4,
+        name:"HR",
+        age:30,
+        gender:"男",
+        occupation:"HR",
+        personality:"热情、积极、有责任心",
+        likes:["招聘","面试","工作"],
+        dislikes:["拖延","不专业"]
       }
     ];
     this.memory = new Map();

@@ -27,6 +27,7 @@ app.post('/api/llm/chat', express.json(), async (req, res) => {
 对话历史：${chatHistory || ''}
 
 请根据玩家输入进行合理回复。`;
+  
 
     const messagesToSend = Array.isArray(messages) && messages.length > 0
       ? messages
@@ -36,24 +37,27 @@ app.post('/api/llm/chat', express.json(), async (req, res) => {
           { role: 'user', content: playerInput || '' }
         ];
 
-    // 从环境读取真实提供方 URL 与 KEY（方便替换为你从 GitHub 第三方拿到的接口）
     const LLM_API_URL = process.env.LLM_API_URL || process.env.LLM_URL || '';
     const API_KEY = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY || '';
-// 调试：打印将要使用的 URL 与 API_KEY 掩码（不要把完整 key 打到日志）
-   console.log('Using LLM_API_URL:', LLM_API_URL);
-  if (API_KEY) console.log('Using API_KEY mask:', `${API_KEY.slice(0,6)}...${API_KEY.slice(-6)}`);
+
+    // 调试：打印将要使用的 URL 与 API_KEY 掩码（不要把完整 key 打到日志）
+    console.log('Using LLM_API_URL:', LLM_API_URL);
+    if (API_KEY) console.log('Using API_KEY mask:', `${API_KEY.slice(0,6)}...${API_KEY.slice(-6)}`);
 
     if (!LLM_API_URL || !API_KEY) {
       console.warn('LLM_API_URL or API_KEY missing — returning mock response for local debug.');
       return res.json({ text: `（本地模拟回复）${playerInput || '你好'}` });
     }
 
-    // 支持两种常见协议：chat completions (messages) 或 简单 input 接口
+    // 允许通过环境控制最大 tokens
+    const maxTokens = Number(process.env.LLM_MAX_TOKENS || 800);
+
     const payload = {
       model: process.env.LLM_MODEL || 'gpt-3.5-turbo',
       messages: messagesToSend,
       temperature: 0.7,
-      max_tokens: 400
+      max_tokens: maxTokens,
+      n: 1
     };
 
     const controller = new AbortController();
@@ -82,28 +86,72 @@ app.post('/api/llm/chat', express.json(), async (req, res) => {
     const data = await fetchResp.json();
     console.log('LLM provider response keys:', Object.keys(data || {}));
 
-    // 解析回复（安全访问，兼容多种格式）
-    let reply = null;
-    if (typeof data === 'string') reply = data;
-    else if (data?.text) reply = data.text;
-    else if (Array.isArray(data) && data[0]?.text) reply = data[0].text;
-    else if (data?.choices?.[0]?.message?.content) reply = data.choices[0].message.content;
-    else if (data?.choices?.[0]?.text) reply = data.choices[0].text;
-    else if (data?.output?.[0]?.content) reply = data.output[0].content;
-    else if (data?.result?.output?.[0]?.content) reply = data.result.output[0].content;
+    // 更稳健的回复抽取器（兼容多种 provider 返回格式）
+        function extractReply(d) {
+          if (!d) return null;
+      if (typeof d === 'string' && d.trim()) return d;
+      if (typeof d.text === 'string' && d.text.trim()) return d.text;
+      if (Array.isArray(d) && typeof d[0] === 'string' && d[0].trim()) return d[0];
 
-    if (!reply) {
-      console.error('Unexpected LLM response format. Dumping response (truncated):', JSON.stringify(data).slice(0,2000));
+      // OpenAI-like choices
+      if (Array.isArray(d.choices) && d.choices.length > 0) {
+        const ch = d.choices[0];
+        // message.content (chat completion)
+        if (ch.message) {
+          // message may be string or object
+          const msg = ch.message;
+          if (typeof msg === 'string' && msg.trim()) return msg;
+          if (typeof msg.content === 'string' && msg.content.trim()) return msg.content;
+          // some providers return parts array or content object
+          if (Array.isArray(msg.content?.parts) && msg.content.parts.length > 0) {
+            return msg.content.parts.join('');
+          }
+          if (typeof msg.content === 'object') {
+            // try common fields
+            if (typeof msg.content.text === 'string' && msg.content.text.trim()) return msg.content.text;
+            if (typeof msg.content[0] === 'string' && msg.content[0].trim()) return msg.content[0];
+          }
+        }
+        // choice.text (completion style)
+        if (typeof ch.text === 'string' && ch.text.trim()) return ch.text;
+        if (typeof ch.content === 'string' && ch.content.trim()) return ch.content;
+        // some providers embed output in annotations or output/result fields
+      }
+
+      // Anthropic / other style outputs
+      if (Array.isArray(d.output) && d.output[0] && d.output[0].content) {
+        const c = d.output[0].content;
+        if (typeof c === 'string' && c.trim()) return c;
+        if (Array.isArray(c) && typeof c[0] === 'string') return c.join('');
+        if (typeof c === 'object' && typeof c.text === 'string') return c.text;
+      }
+      if (d.result?.output?.[0]?.content) {
+        const c = d.result.output[0].content;
+        if (typeof c === 'string' && c.trim()) return c;
+        if (Array.isArray(c) && typeof c[0] === 'string') return c.join('');
+      }
+
+      return null;
+    }
+
+    const replyText = extractReply(data);
+
+    // 如果回复为空且模型 finish_reason 为 length，记录并提示
+    const finishReason = data?.choices?.[0]?.finish_reason || data?.choices?.[0]?.message?.finish_reason || null;
+    if (!replyText) {
+      console.error('Unexpected LLM response format. Full response (truncated):', JSON.stringify(data).slice(0,2000));
+      if (finishReason === 'length') {
+        return res.status(502).json({
+          error: 'Unexpected response format from LLM (reply empty). Model finish_reason=length (truncated). Try increasing LLM_MAX_TOKENS.',
+          data
+        });
+      }
       return res.status(502).json({ error: 'Unexpected response format from LLM', data });
     }
 
-    return res.json({ text: reply });
+    return res.json({ text: replyText });
   } catch (err) {
-    if (err.name === 'AbortError') {
-      console.error('LLM request timed out');
-      return res.status(504).json({ error: 'LLM request timed out' });
-    }
-    console.error('Chat API error:', err);
-    return res.status(500).json({ error: 'Chat failed', message: String(err) });
+    console.error('Error in /api/llm/chat:', err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
