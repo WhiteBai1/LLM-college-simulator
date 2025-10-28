@@ -390,6 +390,15 @@
           confirm: message.ok
           actions:
             # 计算成功概率（属性70% + 运气30%）
+            - id: DisplayMessage
+              message: "你将参加一个模拟面试，请认真回答。"
+              confirm: message.ok
+            - id: UpdateVariables
+              updates:
+                interview.score: 0
+            - id: EAInterview
+              npcId: 4
+              npcName: "面试官"
 
             - id: Switch
               branches:
@@ -427,6 +436,15 @@
         - message: message.choiceResearch
           confirm: message.ok
           actions:
+            - id: DisplayMessage
+              message: "你将参加一个模拟面试，请认真回答。"
+              confirm: message.ok
+            - id: UpdateVariables
+              updates:
+                interview.score: 0
+            - id: EAInterview
+              npcId: 4
+              npcName: "面试官"
             - id: Switch
               branches:
                 # +
@@ -530,7 +548,7 @@
   priority: 4
   conditions:
     - id: Expression
-      expression: week == 10  
+      expression: week == 8  
   actions:
     - id: DisplayMessage
       message: "学长要来传授考试经验了。"
@@ -540,19 +558,19 @@
       prompt: "期中/期末考试复习与应考要点"
       npcName: "学长"
 
-- id: Test_Interview
-  trigger: WeekBegin
-  priority: 4
-  conditions:
-    - id: Expression
-      expression: week == 21
-  actions:
-    - id: DisplayMessage
-      message: "你将参加一个模拟面试，请认真回答。"
-      confirm: message.ok
-    - id: UpdateVariables
-      updates:
-        interview.score: 0
-    - id: EAInterview
-      npcId: 4
-      npcName: "面试官"
+# - id: Test_Interview
+#   trigger: WeekBegin
+#   priority: 4
+#   conditions:
+#     - id: Expression
+#       expression: week == 21
+#   actions:
+#     - id: DisplayMessage
+#       message: "你将参加一个模拟面试，请认真回答。"
+#       confirm: message.ok
+#     - id: UpdateVariables
+#       updates:
+#         interview.score: 0
+#     - id: EAInterview
+#       npcId: 4
+#       npcName: "面试官"

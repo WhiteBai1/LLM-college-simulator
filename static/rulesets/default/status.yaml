@@ -88,13 +88,13 @@ status:
             type: Absolute
             amount: -5
             
-  - id: finalExamStress
+  - id:  FinaltermsPressure
     duration: 2
     effects:
       - attributeModifiers:
           - target: player.gradeBoost
             type: Absolute
-            amount: -25
+            amount: -8
           - target: player.healthBoost
             type: Absolute
-            amount: -15
+            amount: -8
