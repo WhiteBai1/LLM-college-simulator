@@ -57,12 +57,12 @@ footer:
   preamble:
   buttons:
     - text: ui.github
-      url: https://github.com/NetherXiaoYu/phd-game
+      url: https://github.com/WhiteBai1/LLM-college-simulator
     - text: ui.helpButton
       messageTitle: ui.helpTitle
       message: "大学四年，你会如何平衡学习、社交与生活？"
       confirmText: ui.ok
     - text: ui.creditsButton
       messageTitle: "制作团队"
-      message: "项目立项：大一立项\n代码开发：NetherXiaoYu 团队\nAI生成支持：ChatGPT-5"
+      message: "项目立项：大一立项,采用ChatGPT-5"
       confirmText: ui.ok
