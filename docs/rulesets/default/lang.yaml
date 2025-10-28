@@ -10,9 +10,9 @@ ui.privacyNoticeContent: This webpage is hosted under research.wmz.ninja, which 
 ui.helpButton: Help
 ui.helpTitle: Help
 ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
-ui.health: health {{player.healthBoost}}
+ui.health: "health {{player.healthBoost}}"
 ui.timeMeter: Week {{week}}
-ui.learnBoost: learnBoost {{player.learnBoost}}
+ui.learnBoost: "learnBoost {{player.learnBoost}}"
 
 
 #status
