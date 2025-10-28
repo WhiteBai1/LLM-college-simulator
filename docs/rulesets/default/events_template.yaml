@@ -1,0 +1,8 @@
+- id: example.my_action_event
+  trigger: Tick
+  probability: 1.0
+  conditions: []
+  actions:
+    - id: MyAction
+      message: "events.my_action_message"
+      setVariable: "score = (score || 0) + 1"

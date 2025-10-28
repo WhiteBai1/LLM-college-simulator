@@ -1,16 +1,20 @@
 {
-  "name": "phd-game",
-  "version": "0.0.2",
-  "description": "A random event driven text-based game engine, for simulating a PhD student's life.",
+  "name": "bachelor-simulator",
+  "version": "0.0.1",
+  "description": "A random event driven text-based game engine, for simulating a bachelor student's life.",
   "scripts": {
-    "build": "npx webpack",
-    "start": "node app.js"
+   "build": "webpack --mode production",
+    "start": "node app.js",
+    "clean": "rm -rf docs && mkdir docs",
+    "serve": "npx http-server docs",
+    "deploy": "npm run clean && npm run build && git add docs && git commit -m 'deploy' && git push origin main"
   },
   "author": "Mianzhi Wang",
   "license": "MIT",
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "express": "^4.18.2",
+    "html-webpack-plugin": "^5.6.4",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2",
