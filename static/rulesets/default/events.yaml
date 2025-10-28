@@ -49,9 +49,9 @@
   actions:
     - id: UpdateVariables
       updates:
-        player.learnBoost: min(max(player.learnBoost + getAttributeValue('player.learnBoost') * 0.01, 0), 100)
-        player.healthBoost: min(max(player.healthBoost + getAttributeValue('player.healthBoost') * 0.01, 0), 100)
-        player.gradeBoost: min(max(player.gradeBoost + getAttributeValue('player.gradeBoost') * 0.005, 0), 100)
+        player.learnBoost: min(max(player.learnBoost + getAttributeValue('player.learnBoost') * 0.1, 0), 100)
+        player.healthBoost: min(max(player.healthBoost + getAttributeValue('player.healthBoost') * 0.05, 0), 100)
+        player.gradeBoost: min(max(player.gradeBoost + getAttributeValue('player.gradeBoost') * 0.05, 0), 100)
         player.academicIntention: min(max(player.academicIntention + getAttributeValue('player.academicIntention'), 0), 100)
         player.technicIntention: min(max(player.technicIntention + getAttributeValue('player.technicIntention'), 0), 100)
 
@@ -86,8 +86,8 @@
             - id: UpdateVariables
               updates:
                 player.gradeBoost: player.gradeBoost + 3
-                player.learnBoost: player.learnBoost + 2
-                player.healthBoost: player.healthBoost -1
+                player.learnBoost: player.learnBoost + 3
+                player.healthBoost: player.healthBoost - 4
                 player.academicIntention: player.academicIntention + 2
             - id: Random
               condition: player.healthBoost < 75
