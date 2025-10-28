@@ -90,7 +90,7 @@
                 player.healthBoost: player.healthBoost -1
                 player.academicIntention: player.academicIntention + 2
             - id: Random
-              condition: player.health < 75
+              condition: player.healthBoost < 75
               probability: 0.4
               groups:
                 - weight: 1

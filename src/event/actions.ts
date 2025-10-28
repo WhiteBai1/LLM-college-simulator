@@ -387,10 +387,14 @@ export class EADisplayChoices extends EventAction {
 export class EARandom extends EventAction {
   private _actions: EventActionList[];
   private _weightExprs: CompiledEventExpression[];
+  private _condition?: CompiledEventExpression;
+  private _probability?: number;
 
   constructor(
     actions: EventActionList[],
-    weightExprs: CompiledEventExpression[]
+    weightExprs: CompiledEventExpression[],
+    condition?: CompiledEventExpression,
+    probability: number = 1
   ) {
     super();
     if (actions.length !== weightExprs.length) {
@@ -400,6 +404,8 @@ export class EARandom extends EventAction {
     }
     this._actions = actions;
     this._weightExprs = weightExprs;
+    this._condition = condition;
+    this._probability = probability;
   }
 
   static ID = "Random";
@@ -408,7 +414,7 @@ export class EARandom extends EventAction {
    * Creates an `EARandom` instance from its JSON definition stored in the
    * given JSON object.
    * @param obj Schema:
-   *     ```
+   *     ‍```
    *     {
    *         "id": "Random",
    *         "groups": [
@@ -418,7 +424,7 @@ export class EARandom extends EventAction {
    *             }
    *         ]
    *     }
-   *     ```
+   *     ‍```
    *     The `weight` field can be an expression.
    * @param context Used to create nested actions and compile expressions from
    *     the `weight` field.
@@ -448,13 +454,54 @@ export class EARandom extends EventAction {
         new EventActionList(context.actionFactory.fromJSONArray(o["actions"]))
       );
     }
-    return new EARandom(actions, weightExprs);
+
+    // Compile condition (default: true)
+    let conditionExpr: CompiledEventExpression | undefined = undefined;
+    if (typeof obj["condition"] === "string") {
+      conditionExpr = context.expressionCompiler.compile(obj["condition"]);
+    }
+
+    let probability: number = 1;
+    if (obj["probability"] !== undefined) {
+      const parsed = parseFloat(obj["probability"]);
+      if (isNaN(parsed) || parsed < 0 || parsed > 1) {
+        throw new Error("Invalid probability: must be between 0 and 1.");
+      }
+      probability = parsed;
+    }
+
+    return new EARandom(actions, weightExprs, conditionExpr, probability);
   }
 
   execute(
     context: EventActionExecutionContext
   ): EventActionResult | Promise<EventActionResult> {
-    return this._actions[this._randomIndex(context)].execute(context);
+    const evaluator = context.evaluator;
+    const random = context.random;
+
+    console.log("[Random] execute() called");
+    console.log("[Random] condition:", this._condition ? "exists" : "none");
+    console.log("[Random] probability:", this._probability);
+
+    if (this._condition && !evaluator.eval(this._condition)) {
+      console.log("[Random] Condition not met -> skip");
+      return EventActionResult.Ok;
+    }
+
+    const randVal = random.next();
+    console.log("[Random] randVal =", randVal);
+    if (randVal > (this._probability ?? 1)) {
+      console.log(
+        `[Random] Skip due to probability (${randVal.toFixed(2)} > ${
+          this._probability
+        })`
+      );
+      return EventActionResult.Ok;
+    }
+
+    const index = this._randomIndex(context);
+    console.log("[Random] executing group index =", index);
+    return this._actions[index].execute(context);
   }
 
   collectTranslationKeys(): Set<string> {
@@ -462,6 +509,7 @@ export class EARandom extends EventAction {
     for (const actionList of this._actions) {
       builder.addAll(actionList.collectTranslationKeys());
     }
+
     return builder.get();
   }
 
@@ -472,7 +520,6 @@ export class EARandom extends EventAction {
     );
   }
 }
-
 /**
  * Randomly chooses one of the two action lists to execute via a coin flip.
  * This action is a simplified version of `EARandom` when you only need randomly
