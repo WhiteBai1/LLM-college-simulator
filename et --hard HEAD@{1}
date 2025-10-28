@@ -1,0 +1,24 @@
+[33m0ab634c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/bachelor[m[33m)[m HEAD@{0}: reset: moving to 0ab634c
+[33mb43c1f9[m HEAD@{1}: reset: moving to b43c1f9
+[33mbe436a6[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{2}: reset: moving to origin/main
+[33mbe436a6[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{3}: reset: moving to origin/main
+[33mbe436a6[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{4}: reset: moving to HEAD
+[33mbe436a6[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{5}: commit: update build
+[33m2a5fc4e[m HEAD@{6}: commit: debug event
+[33mb43c1f9[m HEAD@{7}: commit: update README
+[33me2b34a2[m HEAD@{8}: commit: update LICENSE
+[33mb3effd9[m HEAD@{9}: commit: update build
+[33m0ab634c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/bachelor[m[33m)[m HEAD@{10}: Branch: renamed refs/heads/bachelor to refs/heads/main
+[33m0ab634c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/bachelor[m[33m)[m HEAD@{12}: reset: moving to origin/bachelor
+[33m36c9ec4[m HEAD@{13}: commit: basic plot of fresh man year
+[33m5db28f9[m HEAD@{14}: commit: add priority in event
+[33m022d7d4[m HEAD@{15}: commit: add final Exam
+[33m47f8337[m HEAD@{16}: checkout: moving from llmtest to bachelor
+[33m13fb47d[m[33m ([m[1;31morigin/llmtest[m[33m, [m[1;32mllmtest[m[33m)[m HEAD@{17}: reset: moving to HEAD
+[33m13fb47d[m[33m ([m[1;31morigin/llmtest[m[33m, [m[1;32mllmtest[m[33m)[m HEAD@{18}: checkout: moving from bachelor to llmtest
+[33m47f8337[m HEAD@{19}: commit: add probability function in random
+[33mef6cdd8[m HEAD@{20}: commit: debug and run successfully
+[33m540ce88[m HEAD@{21}: commit: update to bachelor version
+[33m3d49cb0[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{22}: checkout: moving from master to bachelor
+[33m3d49cb0[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{23}: commit: bachelor-game
+[33mfb92b55[m HEAD@{24}: clone: from https://github.com/morriswmz/phd-game.git

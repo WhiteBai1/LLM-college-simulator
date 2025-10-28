@@ -25,3 +25,10 @@ outputted to the `dist` directory.
 > my website.
 
 
+## Credits
+
+This project is based on the open-source project by [Mianzhi Wang](https://github.com/morriswmz/phd-game),
+licensed under the [MIT License](https://github.com/morriswmz/phd-game/blob/master/LICENSE).
+
+Original Copyright (c) 2018 Mianzhi Wang  
+Modifications and extensions are made for educational and research purposes.
