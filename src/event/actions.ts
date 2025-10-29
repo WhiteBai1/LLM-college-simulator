@@ -1918,4 +1918,109 @@ export class EAInterview extends EventAction {
   }
 }
 
+/**
+ * EAPersonalReport
+ * 由 LLM 根据玩家属性生成个性化分析报告与改进建议。
+ */
+export class EAPersonalReport extends EventAction {
+  static ID = "EAPersonalReport";
+
+  private _npcId: number;
+  private _npcName?: string;
+  private _prompt?: string;
+
+  constructor(npcId: number, npcName?: string, prompt?: string) {
+    super();
+    this._npcId = npcId;
+    this._npcName = npcName;
+    this._prompt = prompt;
+  }
+
+  static fromJSONObject(
+    obj: any,
+    context: EventActionDeserializationContext
+  ): EventAction {
+    if (obj["npcId"] == undefined)
+      throw new Error("EAPersonalReport: npcId missing.");
+    return new EAPersonalReport(
+      Number(obj["npcId"]),
+      obj["npcName"],
+      obj["prompt"]
+    );
+  }
+
+  async execute(
+    context: EventActionExecutionContext
+  ): Promise<EventActionResult> {
+    const npcName = this._npcName || "导师";
+    await context.actionProxy.displayMessage(
+      `${npcName}正在生成你的个性化报告...`,
+      "OK"
+    );
+
+    const llm = getGlobalLLMProvider();
+
+    // 1️⃣ 读取主要属性
+    const attrs = [
+      "player.learnBoost",
+      "player.healthBoost",
+      "player.gradeBoost",
+      "player.academicIntention",
+      "player.technicIntention",
+      "player.EQBoost",
+    ];
+
+    const attributeValues: Record<string, number> = {};
+    for (const key of attrs) {
+      let val = 0;
+      try {
+        const v = (context.variableStore as any).getVar
+          ? (context.variableStore as any).getVar(key, false)
+          : 0;
+        val = typeof v === "number" ? v : Number(v) || 0;
+      } catch {
+        val = 0;
+      }
+      attributeValues[key] = val;
+    }
+
+    // 2️⃣ 构建 prompt
+    const prompt = `
+你是大学导师，请基于这些数据(${JSON.stringify(attributeValues)})，
+撰写一份个人报告，包含以下部分：
+1. 各方面（学习力、健康状态、成绩倾向、科研意向、技术倾向、情绪管理）分析（每项1~2句）。
+2. 给出3~5条具体改进建议，尽量结合数值表现提出针对性方向。
+3. 简单评价学生本学期总体表现，最后以一句鼓励性的总结结束。
+请输出自然、连贯中文文本，不要使用项目符号或JSON格式。
+报告标题为：“${this._prompt || "个人发展报告"}”
+    `.trim();
+
+    // 3️⃣ 调用 LLM
+    try {
+      const timeoutMs = 15000;
+      const llmPromise: Promise<string> = (llm as any).chatWithNPC
+        ? (llm as any).chatWithNPC(this._npcId, prompt, {})
+        : llm.generate(prompt, {});
+
+      const reply = await Promise.race<string>([
+        llmPromise,
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("LLM timeout")), timeoutMs)
+        ),
+      ]);
+
+      // 4️⃣ 展示报告
+      await context.actionProxy.displayMessage(`${npcName}：\n${reply}`, "OK");
+    } catch (err) {
+      console.error("EAPersonalReport error:", err);
+      await context.actionProxy.displayMessage(
+        `${npcName}: 抱歉，生成报告失败。`,
+        "OK"
+      );
+    }
+
+    return EventActionResult.Ok;
+  }
+}
+
 // ...existing code...

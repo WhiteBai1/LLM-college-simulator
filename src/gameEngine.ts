@@ -43,6 +43,7 @@ import { AttributeRegistry } from "./effect/attribute";
 import { EANPCChat } from "./event/npcChat";
 import { EAExamPrep } from "./event/actions";
 import { EAInterview } from "./event/actions";
+import { EAPersonalReport } from "./event/actions";
 export interface GameConfig {
   initialRandomSeed?: string;
   attributeDefinitionUrl?: string;
@@ -275,6 +276,7 @@ export class GameEngine {
     });
     this._actionFactory.registerDeserializer(EAExamPrep);
     this._actionFactory.registerDeserializer(EAInterview);
+    this._actionFactory.registerDeserializer(EAPersonalReport);
     // Condition factory
     this._conditionFactory.registerDeserializer(ECExpression);
     this._conditionFactory.registerDeserializer(ECNot);

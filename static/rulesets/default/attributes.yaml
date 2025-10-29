@@ -12,5 +12,3 @@ attributes:
   baseValue: 0
 - id: player.technicIntention
   baseValue: 0
-- id: week
-  baseValue: 0

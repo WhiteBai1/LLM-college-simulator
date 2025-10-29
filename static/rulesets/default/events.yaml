@@ -536,6 +536,12 @@
     - id: Expression
       expression: week > 40   
   actions:
+    - id: EAPersonalReport
+      message: "大一结束了！根据您一年的表现，正在为您生成一个个性化报告..."
+      npcId: 4
+      npcName: "导师"
+      prompt: "大学期末总结报告"
+      confirm: message.ok
     - id: EndGame
       message: message.end
       confirm: message.restart
