@@ -8,7 +8,16 @@
     <!-- <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> -->
     <link rel="icon" type="image/png" href="images/icon.png" />
     <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-    <base href="/LLM-college-simulator/">
+    <script>
+    (function() {
+        // Compatible with both local and online
+      const base = location.hostname === 'localhost'
+        ? '/'
+        : '/LLM-college-simulator/';
+      document.write(`<base href="${base}">`);
+      console.log('Base path set to:', base);
+    })();
+  </script>
 </head>
 <body>
     <div id="fx_container" class="fx_container"></div>
