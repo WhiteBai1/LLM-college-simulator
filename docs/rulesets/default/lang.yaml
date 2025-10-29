@@ -11,9 +11,9 @@ ui.helpButton: Help
 ui.helpTitle: Help
 ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
 ui.creditsButton: credits
-ui.health: 健康 {{player.healthBoost}}
+ui.health: 健康 {{healthBoost}}
 ui.timeMeter: 周 {{week}}
-ui.learnBoost: 学习 {{player.learnBoost}}
+ui.learnBoost: 学习 {{learnBoost}}
 
 
 #status

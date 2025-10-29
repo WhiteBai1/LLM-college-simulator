@@ -1,8 +1,8 @@
 ---
 attributes:
-- id: player.learnBoost
+- id: learnBoost
   baseValue: 60
-- id: player.healthBoost
+- id: healthBoost
   baseValue: 100
 - id: player.EQBoost
   baseValue: 60
