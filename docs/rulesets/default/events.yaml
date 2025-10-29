@@ -215,7 +215,7 @@
   priority: 6
   conditions:
     - id: Expression
-      expression: week == 8 || week == 36
+      expression: week == 6 || week == 30
   actions:
     - id: SetStatus
       statusId: midtermsPressure
@@ -231,7 +231,7 @@
   priority: 6
   conditions:
     - id: Expression
-      expression: week == 10  || week == 38
+      expression: week == 8  || week == 32
   actions:
     - id: DisplayMessage
       message: message.midterm
@@ -275,7 +275,7 @@
   priority: 6
   conditions:
     - id: Expression
-      expression: week == 18 || week == 46
+      expression: week == 14 || week == 38
   actions:
     - id: SetStatus
       statusId: FinaltermsPressure
@@ -290,7 +290,7 @@
   priority: 6
   conditions:
     - id: Expression
-      expression: week == 20 || week == 48
+      expression: week == 16 || week == 40
   actions:
     - id: DisplayMessage
       message: message.Finalterm
@@ -335,7 +335,7 @@
   priority: 6
   conditions:
     - id: Expression
-      expression: week == 21 
+      expression: week == 17 
   actions:
     - id: SetStatus
       statusId: summerInternship
@@ -414,7 +414,7 @@
                         player.technicIntention: player.technicIntention + 16
                         player.healthBoost: player.healthBoost - 15
                         player.EQBoost: player.EQBoost + 3
-                        week: week+8
+                        week: week+6
                     - id: SetStatus
                       statusId: successInternship
                       on: true
@@ -443,8 +443,8 @@
               updates:
                 interview.score: 0
             - id: EAInterview
-              npcId: 4
-              npcName: "面试官"
+              npcId: 1
+              npcName: "导师"
             - id: Switch
               branches:
                 # +
@@ -459,7 +459,7 @@
                         player.academicIntention: player.academicIntention + 16
                         player.gradeBoost: player.gradeBoost + 8
                         player.healthBoost: player.healthBoost - 15
-                        week: week +8
+                        week: week +6
                     - id: SetStatus
                       statusId: successResearch
                       on: true
@@ -484,7 +484,7 @@
   priority: 6
   conditions: 
     - id: Expression
-      expression: week == 29
+      expression: week == 25
   actions: 
     - id: DisplayMessage
       message: message.newterm
@@ -534,11 +534,12 @@
   priority: 10
   conditions: 
     - id: Expression
-      expression: week > 48   
+      expression: week > 40   
   actions:
-    - id: DisplayMessage
+    - id: EndGame
       message: message.end
-      confirm: message.ok
+      confirm: message.restart
+      winning: true
     # - id: TriggerEvent
       # eventId: EndReport
 
@@ -548,7 +549,7 @@
   priority: 4
   conditions:
     - id: Expression
-      expression: week == 8  
+      expression: week == 6  
   actions:
     - id: DisplayMessage
       message: "学长要来传授考试经验了。"

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A random event driven text-based game engine, for simulating a bachelor student's life.",
   "scripts": {
-   "build": "webpack --mode production",
+    "build": "webpack --mode production",
     "start": "node app.js",
     "clean": "rm -rf docs && mkdir docs",
     "serve": "npx http-server docs",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/js-yaml": "^4.0.5",
     "@types/seedrandom": "^3.0.5",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "js-yaml": "^4.1.0",
     "node-fetch": "^2.7.0",
