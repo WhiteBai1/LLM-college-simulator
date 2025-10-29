@@ -94,7 +94,10 @@ status:
       - attributeModifiers:
           - target: player.gradeBoost
             type: Absolute
-            amount: -8
+            amount: -7
+          - target: player.learnBoost
+            type: Absolute
+            amount: +3
           - target: player.healthBoost
             type: Absolute
             amount: -8

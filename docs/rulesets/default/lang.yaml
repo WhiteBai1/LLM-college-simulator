@@ -2,7 +2,7 @@
 #ui
 ui.ok: Ok.
 ui.items: "Items:"
-ui.status: "Status:"
+ui.status: "状态:"
 ui.github: GitHub
 ui.privacyNoticeButton: Privacy Notice
 ui.privacyNoticeTitle: Privacy Notice
@@ -10,12 +10,22 @@ ui.privacyNoticeContent: This webpage is hosted under research.wmz.ninja, which 
 ui.helpButton: Help
 ui.helpTitle: Help
 ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
-ui.health: "health {{player.healthBoost}}"
-ui.timeMeter: "Week:{{week}}"
-ui.learnBoost: "learnBoost {{player.learnBoost}}"
+ui.creditsButton: credits
+ui.health: "健康 {{player.healthBoost}}"
+ui.timeMeter: "周:{{week}}"
+ui.learnBoost: "学习 {{player.learnBoost}}"
 
 
 #status
+status.firstYearOrientation: "上大学了，好兴奋！"
+status.midtermsPressure: "要期中考了，有点紧张。"
+status.summerInternship: "放假了，要做点什么呢？"
+status.successInternship: "哦耶，实习成功了。"
+status.failInternship: "哦不，实习失败了。"
+status.successResearch: "哦耶，开始尝试科研了。"
+status.failResearch: "哦不，研究有点失败。"
+status.burnout: "好累好累好累，注意休息！"
+status. FinaltermsPressure: "期末考了，要准备复习了。"
 
 # beginning
 message.beginningCollege: "你踏入了大学校园，新的旅程即将开始！"
