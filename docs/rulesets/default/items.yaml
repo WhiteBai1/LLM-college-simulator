@@ -1,1 +1,20 @@
 ---
+items:
+  - id: dailyQuote1
+    rarity: 3
+  - id: dailyQuote2
+    rarity: 3
+  - id: dailyQuote3
+    rarity: 3
+  - id: dailyQuote4
+    rarity: 3
+  - id: dailyQuote5
+    rarity: 3
+  - id: dailyQuote6
+    rarity: 3
+  - id: dailyQuote7
+    rarity: 3
+  - id: dailyQuote8
+    rarity: 3
+  - id: dailyQuote9
+    rarity: 3

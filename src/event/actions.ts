@@ -1150,6 +1150,63 @@ export class EAUpdateItemAmounts extends EventAction {
 }
 
 /**
+ * Sets the absolute amounts of items (instead of adding/subtracting).
+ * Example YAML:
+ *
+ * ```yaml
+ * - id: SetItemAmounts
+ *   updates:
+ *     dailyQuote1: 0
+ *     dailyQuote3: 1
+ * ```
+ */
+export class EASetItemAmounts extends EventAction {
+  constructor(
+    private _itemIds: string[],
+    private _setExprs: CompiledEventExpression[]
+  ) {
+    super();
+    if (_itemIds.length !== _setExprs.length) {
+      throw new Error(
+        "The number of items must match the number of expressions."
+      );
+    }
+  }
+
+  static ID = "SetItemAmounts";
+
+  /**
+   * Loads this action from its JSON/YAML definition.
+   */
+  static fromJSONObject(
+    obj: any,
+    context: EventActionDeserializationContext
+  ): EASetItemAmounts {
+    if (obj["updates"] == undefined) {
+      throw new Error("Missing update definitions.");
+    }
+    let itemIds: string[] = [];
+    let setExprs: CompiledEventExpression[] = [];
+    for (const itemId in obj["updates"]) {
+      itemIds.push(itemId);
+      setExprs.push(context.expressionCompiler.compile(obj["updates"][itemId]));
+    }
+    return new EASetItemAmounts(itemIds, setExprs);
+  }
+
+  execute(
+    context: EventActionExecutionContext
+  ): EventActionResult | Promise<EventActionResult> {
+    for (let i = 0; i < this._itemIds.length; i++) {
+      const itemId = this._itemIds[i];
+      const newAmount = context.evaluator.eval(this._setExprs[i]);
+      context.inventory.setItemAmounts(itemId, newAmount);
+    }
+    return EventActionResult.Ok;
+  }
+}
+
+/**
  * Ends the game.
  */
 export class EAEndGame extends EventAction {

@@ -60,7 +60,7 @@
 #game beginning
 - id: TheBeginning  
   trigger: WeekBegin
-  priority: 6
+  priority: 10
   once: true
   actions:
     - id: DisplayMessage
@@ -574,3 +574,70 @@
 #     - id: EAInterview
 #       npcId: 4
 #       npcName: "面试官"
+
+
+
+- id: WeeklyDailyQuote
+  trigger: WeekBegin
+  priority: 8
+  actions:
+    - id: SetItemAmounts
+      updates:
+        dailyQuote1: 0
+        dailyQuote2: 0
+        dailyQuote3: 0
+        dailyQuote4: 0
+        dailyQuote5: 0
+        dailyQuote6: 0
+        dailyQuote7: 0
+        dailyQuote8: 0
+        dailyQuote9: 0
+
+    # 2. 随机获得一条金句
+    - id: Random
+      groups:
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote1
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote2
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote3
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote4
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote5
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote6
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote7
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote8
+              amount: 1
+        - weight: 1
+          actions:
+            - id: GiveItem
+              itemId: dailyQuote9
+              amount: 1

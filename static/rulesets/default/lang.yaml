@@ -1,7 +1,7 @@
 ---
 #ui
 ui.ok: Ok.
-ui.items: "Items:"
+ui.items: "每日金句"
 ui.status: "状态:"
 ui.github: GitHub
 ui.privacyNoticeButton: Privacy Notice
@@ -15,6 +15,16 @@ ui.health: "健康 {{player.healthBoost}}"
 ui.timeMeter: "周:{{week}}"
 ui.learnBoost: "学习 {{player.learnBoost}}"
 
+#item
+item.dailyQuote1: Stay hungry; stay foolish.
+item.dailyQuote2: There is no such thing as a great talent without great will - power.
+item.dailyQuote3: The real talent is resolute aspirations.
+item.dailyQuote4: "机不可失，时不再来"
+item.dailyQuote5: No more like ignorance than rashly.
+item.dailyQuote6: The most terrible enemy is no strong belief.
+item.dailyQuote7: How important is how to survive,rather than death?
+item.dailyQuote8: All things are difficult before they are easy,and every science.
+item.dailyQuote9: Opportunity only once,once missed,will never get.
 
 #status
 status.firstYearOrientation: "上大学了，好兴奋！"
@@ -28,7 +38,7 @@ status.burnout: "好累好累好累，注意休息！"
 status. FinaltermsPressure: "期末考了，要准备复习了。"
 
 # beginning
-message.beginningCollege: "你踏入了大学校园，新的旅程即将开始！"
+message.beginningCollege: "你背上行囊，踏入崭新的校园。晨光洒在林荫道上，心中既有憧憬，也有些忐忑。未来四年，将是成长、探索与挑战的旅程。每一个选择，都会塑造你的大学人生。准备好了吗？新篇章，现在开始！"
 message.ok: "好的"
 message.great: "太棒了！" 
 message.cool: "真不错！"

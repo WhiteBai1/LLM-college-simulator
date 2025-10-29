@@ -5,26 +5,26 @@ statsBar:
   - text: ui.learnBoost
     side: left
     updateTrigger:
-      variables: ["learnBoost"]
+      variables: ["player.learnBoost"]
     conditionalStyles:
-      - condition: learnBoost >= 80
+      - condition: player.learnBoost >= 80
         styleClasses: ["great"]
-      - condition: learnBoost >= 50 && learnBoost < 80
+      - condition: player.learnBoost >= 50 && player.learnBoost < 80
         styleClasses: ["normal"]
-      - condition: learnBoost < 50
+      - condition: player.learnBoost < 50
         styleClasses: ["warning"]
 
  
   - text: ui.health
     side: left
     updateTrigger:
-      variables: ["healthBoost"]
+      variables: ["player.healthBoost"]
     conditionalStyles:
-      - condition: healthBoost > 70
+      - condition: player.healthBoost > 70
         styleClasses: ["normal"]
-      - condition: healthBoost <= 70 && healthBoost > 40
+      - condition: player.healthBoost <= 70 && player.healthBoost > 40
         styleClasses: ["warning"]
-      - condition: healthBoost <= 40
+      - condition: player.healthBoost <= 40
         styleClasses: ["critical"]
 
   - text: ui.timeMeter
@@ -40,17 +40,17 @@ messageWindow:
 statusList:
   title: ui.status
 
-# itemList:
-#   title: ui.items
-#   raritySpecificStyles:
-#     - minRarity: 10
-#       styleClasses: ["r_legendary"]
-#     - minRarity: 6
-#       maxRarity: 9
-#       styleClasses: ["r_rare"]
-#     - minRarity: 3
-#       maxRarity: 5
-#       styleClasses: ["r_uncommon"]
+itemList:
+  title: ui.items
+  raritySpecificStyles:
+    - minRarity: 10
+      styleClasses: ["r_legendary"]
+    - minRarity: 6
+      maxRarity: 9
+      styleClasses: ["r_rare"]
+    - minRarity: 3
+      maxRarity: 5
+      styleClasses: ["r_uncommon"]
 
 
 footer:

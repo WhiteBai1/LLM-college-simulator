@@ -4,7 +4,7 @@ status:
     duration: 5
     effects:
       - attributeModifiers:
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: +8
 
@@ -12,10 +12,10 @@ status:
     duration: 3
     effects:
       - attributeModifiers:
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: +3
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: -6
 
@@ -23,7 +23,7 @@ status:
     duration: 8
     effects:
       - attributeModifiers:
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: +4
 
@@ -31,10 +31,10 @@ status:
     duration: 8
     effects:
       - attributeModifiers:
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: +5
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: -6
           
@@ -45,7 +45,7 @@ status:
           - target: player.technicIntention
             type: Absolute
             amount: -3
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: -5
             
@@ -56,10 +56,10 @@ status:
           - target: player.gradeBoost
             type: Absolute
             amount: +8
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: +5
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: -6
 
@@ -70,7 +70,7 @@ status:
           - target: player.academicIntention
             type: Absolute
             amount: -3
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: -5
 
@@ -78,10 +78,10 @@ status:
     duration: Infinity
     effects:
       - attributeModifiers:
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: -15
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: -10
           - target: player.EQBoost
@@ -95,9 +95,9 @@ status:
           - target: player.gradeBoost
             type: Absolute
             amount: -7
-          - target: learnBoost
+          - target: player.learnBoost
             type: Absolute
             amount: +3
-          - target: healthBoost
+          - target: player.healthBoost
             type: Absolute
             amount: -8

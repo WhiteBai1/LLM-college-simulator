@@ -19,7 +19,7 @@ body {
     align-items: center;
     background-size: cover;
     font-size: 1em;
-    font-family: 'Press Start 2P', cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft YaHei';
+    font-family: cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft YaHei';
     background: linear-gradient(#87ceeb, #00bfff) no-repeat;
     line-height: 110%;
 }
@@ -130,15 +130,15 @@ em {
     list-style-type: square;
 }
 
-.r_common {}
+.r_common {color: white;}
 .r_uncommon {
-    color: #008a00;
+    color: #a4bece;
 }
 .r_rare {
-    color: #8b008b;
+    color: #415367;
 }
 .r_legendary {
-    color: #ec9000;
+    color: #132e55;
 }
 
 .fx_container {
