@@ -1592,7 +1592,8 @@ export class EANPCChatAction /* adapter for npcChat */ {
     if (typeof obj["npcName"] !== "string")
       throw new Error("npcName must be a string.");
 
-    // 使用 npcChat 模块内已有的反序列化方法创建实际的 EventAction 实例
+    // Create an actual EventAction instance
+    // using the deserialization method already available in the npcChat module
     return EANPCChatImpl.deserialize({
       npcId: obj["npcId"],
       prompt: obj["prompt"],
@@ -1605,7 +1606,8 @@ export class EANPCChatAction /* adapter for npcChat */ {
 import { getGlobalLLMProvider } from "../llm/llmProvider";
 // ...existing code...
 
-// 新增：期中/期末考前 — 学长（LLM）传授经验并与玩家做三选交互，然后给出解答
+//enior (LLM) shares experiences and interacts with players in a three-choice format,
+// then provides answers before exam
 export class EAExamPrep extends EventAction {
   static ID = "EAExamPrep";
 
@@ -1646,7 +1648,7 @@ export class EAExamPrep extends EventAction {
 请只返回可读文本（第一段为开场建议，随后换行列出编号选项）。
 `.trim();
 
-    // 调用 LLM（优先 chatWithNPC）
+    // Call LLM (preferably chatWithNPC)
     try {
       const timeoutMs = 15000;
       const llmPromise: Promise<string> = (llm as any).chatWithNPC
@@ -1660,12 +1662,12 @@ export class EAExamPrep extends EventAction {
         ),
       ]);
 
-      // 解析开场与选项
+      // Tune analysis opening and options
       const lines = (reply || "")
         .split(/\r?\n/)
         .map((l) => l.trim())
         .filter((l) => l);
-      // 找编号选项（1/2/3 开头）或以 - / • 等的行
+      // find option（1/2/3 begin）
       const options: string[] = [];
       const introLines: string[] = [];
       for (const line of lines) {
@@ -1673,7 +1675,8 @@ export class EAExamPrep extends EventAction {
         if (m && m[1]) {
           if (options.length < 3) options.push(m[1].trim());
         } else {
-          // 若已开始收集 options，则把非编号行当作继续选项文本
+          // If  have started collecting options,
+          // treat non-numbered lines as continuation of option text.
           if (options.length > 0 && options.length < 3) {
             options[options.length - 1] += " " + line;
           } else {
@@ -1682,7 +1685,8 @@ export class EAExamPrep extends EventAction {
         }
       }
 
-      // 若解析不到选项，试着从 reply 的后半段取三行作为选项
+      // If the options cannot be parsed,
+      // try taking three lines from the latter half of the reply as the options.
       if (options.length === 0) {
         const tail = lines.slice(-3);
         for (const t of tail) {
@@ -1690,13 +1694,12 @@ export class EAExamPrep extends EventAction {
         }
       }
 
-      // 保证至少三个候选项
+      // at least 3 options
       while (options.length < 3) options.push("我想要更多复习建议。");
 
       const intro = introLines.join(" ");
 
-      // 显示选项并等待玩家选择（假定 actionProxy.displayChoices 返回所选索引 0-based）
-      // 构造 [string, number][] 选项数组
+      // display and wait player choose
       const choiceTuples: Array<[string, number]> = options.map((opt, idx) => [
         opt,
         idx,
@@ -1712,7 +1715,7 @@ export class EAExamPrep extends EventAction {
       const choosenText =
         options[Math.max(0, Math.min(selIndex, options.length - 1))];
 
-      // 再次调用 LLM 根据所选项给出详细解答
+      // call llm answer the questions
       const detailPrompt = `
 你是经验丰富的学长。玩家选择的问题是：${choosenText}
 请给出针对该问题的详细、可操作的解答（2-6 段或若干要点），并在最后给出一句简短的鼓励语。
@@ -1746,7 +1749,8 @@ export class EAExamPrep extends EventAction {
   }
 }
 
-// 新增：面试事件 — 面试官（LLM）问问题、生成三选项，玩家选项会影响 interview.score
+// New: Interview Event — The interviewer (LLM) asks questions and generates three options;
+// the player's choice will affect the interview.score
 export class EAInterview extends EventAction {
   static ID = "EAInterview";
 
@@ -1798,7 +1802,7 @@ export class EAInterview extends EventAction {
         ),
       ]);
 
-      // 解析选项（与前一致）
+      // analysis
       const lines = (reply || "")
         .split(/\r?\n/)
         .map((l) => l.trim())
@@ -1839,7 +1843,8 @@ export class EAInterview extends EventAction {
       const choiceText =
         options[Math.max(0, Math.min(selIndex, options.length - 1))];
 
-      // 请求 LLM 给出面试官的针对性评价与建议，并返回对分数的建议增减（这里前端自行映射分数变化）
+      //Request the LLM to provide targeted feedback and suggestions for the interviewer,
+      // and return recommendations for score adjustments (the front end will map the score changes by itself).
       const evalPrompt = `
 你是面试官。应聘者选择的回答方向是：${choiceText}
 请以面试官的口吻给出对该回答的评价（中肯、简洁），并给出对面试分数的建议（在 -10 到 +10 之间的整数），格式要求：
@@ -1859,29 +1864,27 @@ export class EAInterview extends EventAction {
         ),
       ]);
 
-      // 尝试从 evalReply 中抽取分数变化
+      // Please try to extract the score changes from evalReply
       let scoreDelta = 0;
       const m = evalReply.match(/分数变化\s*[:：]\s*([+-]?\d+)/);
       if (m) {
         scoreDelta = Number(m[1]) || 0;
       } else {
-        // 兜底：按选择索引给分差，鼓励更主动/技术型的回答
         scoreDelta = selIndex === 0 ? 8 : selIndex === 1 ? 4 : 0;
       }
 
-      // 更新变量 interview.score（如果没有则设为 scoreDelta）
+      // update interview.score（if not, set scoreDelta）
       let curNum = 0;
       try {
         let cur: any;
         if (typeof context.variableStore.getVar === "function") {
-          // 不要求存在，避免抛错
+          // throw error
           cur = context.variableStore.getVar("interview.score", false);
         } else {
           cur = undefined;
         }
         curNum = typeof cur === "number" ? cur : Number(cur) || 0;
       } catch (e) {
-        // 如果 getVar 仍抛异常，兜底为 0
         console.warn(
           "EAInterview: failed to read interview.score, defaulting to 0",
           e
@@ -1891,7 +1894,7 @@ export class EAInterview extends EventAction {
 
       const newScore = curNum + scoreDelta;
 
-      // 写回变量，优先使用 setVar，再退回到通用 set
+      // Write back the variable, preferably use setVar, then fall back to the general set.
       if (typeof context.variableStore.setVar === "function") {
         context.variableStore.setVar("interview.score", newScore);
       } else {
@@ -1901,7 +1904,7 @@ export class EAInterview extends EventAction {
         );
       }
 
-      // 显示评价与分数变化
+      // display comment and score
       await context.actionProxy.displayMessage(
         `${interviewer}：${evalReply}`,
         "OK"
@@ -1920,7 +1923,7 @@ export class EAInterview extends EventAction {
 
 /**
  * EAPersonalReport
- * 由 LLM 根据玩家属性生成个性化分析报告与改进建议。
+ * generate personal report via llm
  */
 export class EAPersonalReport extends EventAction {
   static ID = "EAPersonalReport";
@@ -1960,7 +1963,7 @@ export class EAPersonalReport extends EventAction {
 
     const llm = getGlobalLLMProvider();
 
-    // 1️⃣ 读取主要属性
+    // read attributes
     const attrs = [
       "player.learnBoost",
       "player.healthBoost",
@@ -1984,7 +1987,7 @@ export class EAPersonalReport extends EventAction {
       attributeValues[key] = val;
     }
 
-    // 2️⃣ 构建 prompt
+    //  prompt
     const prompt = `
 你是大学导师，请基于这些数据(${JSON.stringify(attributeValues)})，
 撰写一份个人报告，包含以下部分：
@@ -1995,7 +1998,7 @@ export class EAPersonalReport extends EventAction {
 报告标题为：“${this._prompt || "个人发展报告"}”
     `.trim();
 
-    // 3️⃣ 调用 LLM
+    // call LLM
     try {
       const timeoutMs = 15000;
       const llmPromise: Promise<string> = (llm as any).chatWithNPC
@@ -2009,7 +2012,7 @@ export class EAPersonalReport extends EventAction {
         ),
       ]);
 
-      // 4️⃣ 展示报告
+      // display report
       await context.actionProxy.displayMessage(`${npcName}：\n${reply}`, "OK");
     } catch (err) {
       console.error("EAPersonalReport error:", err);

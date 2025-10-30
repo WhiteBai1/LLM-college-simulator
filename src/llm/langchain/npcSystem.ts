@@ -11,27 +11,27 @@ interface NPC {
 }
 
 class SimpleMemory {
-  private messages: Array<{ type: 'human' | 'ai', content: string }> = [];
+  private messages: Array<{ type: "human" | "ai"; content: string }> = [];
   private maxMessages: number;
-  
+
   constructor(maxMessages: number = 5) {
     this.maxMessages = maxMessages;
   }
-  
+
   getMessages(): string {
-    // 限制消息数量
+    // limites reply numbers
     if (this.messages.length > this.maxMessages) {
       this.messages = this.messages.slice(-this.maxMessages);
     }
-    
-    return this.messages.map(msg => 
-      `${msg.type === 'human' ? '玩家' : 'NPC'}: ${msg.content}`
-    ).join('\n');
+
+    return this.messages
+      .map((msg) => `${msg.type === "human" ? "玩家" : "NPC"}: ${msg.content}`)
+      .join("\n");
   }
-  
+
   addMessage(input: string, response: string) {
-    this.messages.push({ type: 'human', content: input });
-    this.messages.push({ type: 'ai', content: response });
+    this.messages.push({ type: "human", content: input });
+    this.messages.push({ type: "ai", content: response });
   }
 }
 
@@ -63,30 +63,30 @@ class NPCSystem {
       },
       {
         id: 3,
-        name:"学长",
-        age:22,
-        gender:"男",
-        occupation:"学生",
-        personality:"严肃、认真、有条理",
-        likes:["学习","阅读","思考"],
-        dislikes:["玩手机","睡懒觉"]
+        name: "学长",
+        age: 22,
+        gender: "男",
+        occupation: "学生",
+        personality: "严肃、认真、有条理",
+        likes: ["学习", "阅读", "思考"],
+        dislikes: ["玩手机", "睡懒觉"],
       },
       {
-        id:4,
-        name:"HR",
-        age:30,
-        gender:"男",
-        occupation:"HR",
-        personality:"热情、积极、有责任心",
-        likes:["招聘","面试","工作"],
-        dislikes:["拖延","不专业"]
-      }
+        id: 4,
+        name: "HR",
+        age: 30,
+        gender: "男",
+        occupation: "HR",
+        personality: "热情、积极、有责任心",
+        likes: ["招聘", "面试", "工作"],
+        dislikes: ["拖延", "不专业"],
+      },
     ];
     this.memory = new Map();
   }
 
   getNPC(npcId: number): NPC | undefined {
-    return this.npcs.find(npc => npc.id === npcId);
+    return this.npcs.find((npc) => npc.id === npcId);
   }
 
   getMemory(npcId: number): SimpleMemory {
@@ -96,7 +96,7 @@ class NPCSystem {
     return this.memory.get(npcId)!;
   }
 
-  // 添加NPC的方法
+  // add npc function
   addNPC(npc: NPC) {
     this.npcs.push(npc);
   }

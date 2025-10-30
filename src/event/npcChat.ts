@@ -1,5 +1,9 @@
-import { EventAction, EventActionExecutionContext, EventActionResult } from './core';
-import { getGlobalLLMProvider } from '../llm/llmProvider';
+import {
+  EventAction,
+  EventActionExecutionContext,
+  EventActionResult,
+} from "./core";
+import { getGlobalLLMProvider } from "../llm/llmProvider";
 
 export class EANPCChat extends EventAction {
   private npcId: number;
@@ -13,7 +17,9 @@ export class EANPCChat extends EventAction {
     this.npcNameKey = params.npcName;
   }
 
-  async execute(context: EventActionExecutionContext): Promise<EventActionResult> {
+  async execute(
+    context: EventActionExecutionContext
+  ): Promise<EventActionResult> {
     // Use the stored keys as unlocalized message identifiers. The GUI
     // renderer will localize them when rendering. For quick input we use
     // window.prompt() because the project does not yet provide a
@@ -21,14 +27,14 @@ export class EANPCChat extends EventAction {
     const promptText = this.promptKey;
     const npcName = this.npcNameKey;
 
-    const playerInput = window.prompt(promptText, '');
+    const playerInput = window.prompt(promptText, "");
 
     if (!playerInput || !playerInput.trim()) {
       return EventActionResult.Ok;
     }
 
     // Show a thinking message in-game
-    await context.actionProxy.displayMessage(`${npcName}正在思考...`, 'OK');
+    await context.actionProxy.displayMessage(`${npcName}正在思考...`, "OK");
 
     const fullPrompt = `${promptText}\nPlayer: ${playerInput.trim()}\nNPC:`;
     let options: any = { variables: context.variableStore.encodeAsJson() };
@@ -36,7 +42,7 @@ export class EANPCChat extends EventAction {
     try {
       const llm = getGlobalLLMProvider();
 
-      // 超时包装
+      // time out template
       const timeoutMs = 15000;
       const llmPromise: Promise<string> = (llm as any).chatWithNPC
         ? (llm as any).chatWithNPC(this.npcId, playerInput.trim(), options)
@@ -44,13 +50,18 @@ export class EANPCChat extends EventAction {
 
       const response = await Promise.race<string>([
         llmPromise,
-        new Promise<string>((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), timeoutMs))
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("LLM timeout")), timeoutMs)
+        ),
       ]);
-      console.log('LLM response:', response);
-      await context.actionProxy.displayMessage(`${npcName}: ${response}`, 'OK');
+      console.log("LLM response:", response);
+      await context.actionProxy.displayMessage(`${npcName}: ${response}`, "OK");
     } catch (error) {
-      console.error('NPC chat execution error:', error);
-      await context.actionProxy.displayMessage(`${npcName}: 抱歉，我现在无法回应。`, 'OK');
+      console.error("NPC chat execution error:", error);
+      await context.actionProxy.displayMessage(
+        `${npcName}: 抱歉，我现在无法回应。`,
+        "OK"
+      );
     }
 
     return EventActionResult.Ok;
@@ -58,10 +69,10 @@ export class EANPCChat extends EventAction {
 
   serialize(): any {
     return {
-      type: 'EANPCChat',
+      type: "EANPCChat",
       npcId: this.npcId,
       prompt: this.promptKey,
-      npcName: this.npcNameKey
+      npcName: this.npcNameKey,
     };
   }
 
