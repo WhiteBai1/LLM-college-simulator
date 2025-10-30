@@ -6,10 +6,10 @@
   actions:
     - id: UpdateVariableLimits
       updates:
-        player.learnBoost: [0,100]
-        player.healthBoost: [0,100]
-        player.gradeBoost: [0,100]
-        player.EQBoost: [0,100]
+        player.learn: [0,100]
+        player.health: [0,100]
+        player.grade: [0,100]
+        player.EQ: [0,100]
         player.academicIntention: [0,100]
         player.technicIntention: [0,100]
         interview.score: [0,10]
@@ -19,16 +19,14 @@
         week: 0
         semester: 1
         year: 1
-        player.learnBoost: 60
-        player.healthBoost: 100
-        player.gradeBoost: 60
-        player.EQBoost: 60
+        player.learn: 60
+        player.health: 100
+        player.grade: 60
+        player.EQ: 60
         player.academicIntention: 0
         player.technicIntention: 0
         interview.score: 0
-    - id: SetStatus
-      statusId: firstYearOrientation
-      on: true
+    
 
 # main loop
 - id: GameTick
@@ -49,12 +47,12 @@
   actions:
     - id: UpdateVariables
       updates:
-        player.learnBoost: min(max(player.learnBoost + getAttributeValue('player.learnBoost') * 0.1, 0), 100)
-        player.healthBoost: min(max(player.healthBoost + getAttributeValue('player.healthBoost') * 0.05, 0), 100)
-        player.gradeBoost: min(max(player.gradeBoost + getAttributeValue('player.gradeBoost') * 0.05, 0), 100)
-        player.academicIntention: min(max(player.academicIntention + getAttributeValue('player.academicIntention'), 0), 100)
-        player.technicIntention: min(max(player.technicIntention + getAttributeValue('player.technicIntention'), 0), 100)
-
+        player.learn: min(max(player.learn + getAttributeValue('player.learnBoost') , 0), 100)
+        player.health: min(max(player.health + getAttributeValue('player.healthBoost') , 0), 100)
+        player.grade: min(max(player.grade + getAttributeValue('player.gradeBoost') , 0), 100)
+        player.academicIntention: min(max(player.academicIntention + getAttributeValue('player.academicIntentionBoost'), 0), 100)
+        player.technicIntention: min(max(player.technicIntention + getAttributeValue('player.technicIntentionBoost'), 0), 100)
+    
 
 
 #game beginning
@@ -66,6 +64,9 @@
     - id: DisplayMessage
       message: message.beginningCollege
       confirm: message.ok
+    - id: SetStatus
+      statusId: firstYearOrientation
+      on: true
 
 #choose the goal every week
 - id: WeeklyGoal
@@ -85,12 +86,12 @@
               confirm: message.great
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 3
-                player.learnBoost: player.learnBoost + 3
-                player.healthBoost: player.healthBoost - 4
+                player.grade: player.grade + 3
+                player.learn: player.learn + 3
+                player.health: player.health - 4
                 player.academicIntention: player.academicIntention + 2
             - id: Random
-              condition: player.healthBoost < 75
+              condition: player.health < 75
               probability: 0.4
               groups:
                 - weight: 1
@@ -100,11 +101,11 @@
                       confirm: message.sad
                     - id: UpdateVariables
                       updates:
-                        player.gradeBoost: player.gradeBoost - 5
+                        player.grade: player.grade - 5
                         player.academicIntention: player.academicIntention -3
                         player.technicIntention: player.technicIntention -3
-                        player.learnBoost: player.learnBoost - 7
-                        player.healthBoost: player.healthBoost - 5
+                        player.learn: player.learn - 7
+                        player.health: player.health - 5
 
         - message: message.goalRest
           confirm: message.ok
@@ -114,10 +115,10 @@
               confirm: message.cool
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost - 2
-                player.learnBoost: player.learnBoost - 2
-                player.healthBoost: player.healthBoost +8
-                player.EQBoost: player.EQBoost + 3      
+                player.grade: player.grade - 2
+                player.learn: player.learn - 2
+                player.health: player.health +10
+                player.EQ: player.EQ + 3      
 
         - message: message.goalResearch
           confirm: message.ok
@@ -127,11 +128,11 @@
               confirm: message.encouraging
             - id: UpdateVariables
               updates:
-                player.learnBoost: player.learnBoost + 3
+                player.learn: player.learn + 3
                 player.technicIntention: player.technicIntention + 3
                 player.academicIntention: player.academicIntention + 3
-                player.healthBoost: player.healthBoost - 5
-                player.gradeBoost: player.gradeBoost - 2
+                player.health: player.health - 5
+                player.grade: player.grade - 2
             - id: Random
               probability: 0.3
               groups:
@@ -142,25 +143,25 @@
                       confirm: message.excited
                     - id: UpdateVariables
                       updates:
-                        player.gradeBoost: player.gradeBoost + 3
+                        player.grade: player.grade + 3
                         player.academicIntention: player.academicIntention + 5
                         player.technicIntention: player.technicIntention + 5
-                        player.learnBoost: player.learnBoost + 5
+                        player.learn: player.learn + 5
                 - weight: 0.25
                   conditions: 
                     - id: Expression
-                      expression: player.healthBoost < 75       
+                      expression: player.health < 75       
                   actions:
                     - id: DisplayMessage
                       message: message.goalResearchTired
                       confirm: message.ok
                     - id: UpdateVariables
                       updates:
-                        player.gradeBoost: player.gradeBoost - 5
+                        player.grade: player.grade - 5
                         player.academicIntention: player.academicIntention -3
                         player.technicIntention: player.technicIntention -3
-                        player.learnBoost: player.learnBoost - 7
-                        player.healthBoost: player.healthBoost - 5
+                        player.learn: player.learn - 7
+                        player.health: player.health - 5
               
         - message: message.goalCrazyPlay
           confirm: message.ok
@@ -170,10 +171,10 @@
               confirm: message.cool
             - id: UpdateVariables
               updates:
-                player.healthBoost: player.healthBoost + 5   
-                player.gradeBoost: player.gradeBoost - 10      
-                player.EQBoost: player.EQBoost + 5             
-                player.learnBoost: player.learnBoost - 7
+                player.health: player.health + 5   
+                player.grade: player.grade - 10      
+                player.EQ: player.EQ + 5             
+                player.learn: player.learn - 7
                 player.academicIntention: player.academicIntention - 5
                 player.technicIntention: player.technicIntention - 5
             - id: Random
@@ -186,16 +187,15 @@
                       confirm: message.unfortunate
                     - id: UpdateVariables
                       updates:
-                        player.gradeBoost: player.gradeBoost - 10
-                        player.healthBoost: player.healthBoost - 15
+                        player.grade: player.grade - 10
+                        player.health: player.health - 15
 
 # high pressure and tired
 - id: Burnout
   trigger: WeekBegin
-  probability: 0.15
   conditions:
     - id: Expression
-      expression: player.learnBoost > 80 && player.healthBoost < 40
+      expression:  player.health < 40 && !hasStatus('burnout')
   actions:
     - id: DisplayMessage
       message: message.burnout
@@ -205,8 +205,54 @@
       on: true
     - id: UpdateVariables
       updates:
-        player.learnBoost: player.learnBoost - 10
-        player.healthBoost: player.healthBoost - 10
+        player.learn: player.learn - 8
+        player.health: player.health - 8
+
+- id: Tired
+  trigger: WeekBegin
+  conditions:
+    - id: Expression
+      expression: player.health < 70 && !hasStatus('tired') 
+  actions:
+    - id: SetStatus
+      statusId: tired
+      on: true
+    - id: UpdateVariables
+      updates:
+        player.learn: player.learn - 4
+        player.health: player.health - 4
+
+
+- id: BounceBack
+  trigger: WeekBegin
+  conditions:
+    - id: Expression
+      expression: hasStatus('burnout') && player.health > 40
+  actions:
+    - id: DisplayMessage
+      message: message.bounceBack
+      confirm: message.encouraging
+    - id: UpdateVariables
+      updates:
+        player.learnBoost: player.learnBoost + 5
+        player.gradeBoost: player.gradeBoost + 3
+    - id: SetStatus
+      statusId: burnout
+      on: false
+
+- id: TiredBack
+  trigger: WeekBegin
+  conditions:
+    - id: Expression
+      expression: hasStatus('tired') && player.health > 75
+  actions:
+    - id: SetStatus
+      statusId: tired
+      on: false
+    - id: UpdateVariables
+      updates:
+        player.learn: player.learn + 2
+
 
 #speacial events
 
@@ -239,25 +285,25 @@
 
     - id: Switch
       branches:
-        - condition: (player.gradeBoost * 0.4 + player.learnBoost * 0.3 + player.academicIntention * 0.2 + player.healthBoost * 0.1) / 10 >= 8
+        - condition: (player.grade * 0.4 + player.learn * 0.3 + player.academicIntention * 0.2 + player.health * 0.1) / 10 >= 8
           actions:
             - id: DisplayMessage
               message: message.examExcellent
               confirm: message.great
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 12
-                player.learnBoost: player.learnBoost + 5
-                player.healthBoost: player.healthBoost + 3
+                player.grade: player.grade + 12
+                player.learn: player.learn + 5
+                player.health: player.health + 3
 
-        - condition: (player.gradeBoost * 0.4 + player.learnBoost * 0.3 + player.academicIntention * 0.2 + player.healthBoost * 0.1) / 10 >= 6
+        - condition: (player.grade * 0.4 + player.learn * 0.3 + player.academicIntention * 0.2 + player.health * 0.1) / 10 >= 6
           actions:
             - id: DisplayMessage
               message: message.examPassed
               confirm: message.ok
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 6
+                player.grade: player.grade + 6
 
         - condition: "true"
           actions:
@@ -266,8 +312,8 @@
               confirm: message.sucks
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost - 8
-                player.healthBoost: player.healthBoost - 2
+                player.grade: player.grade - 8
+                player.health: player.health - 2
 
 #week18: FinaltermExamComing
 - id: FinaltermExamComing
@@ -298,25 +344,25 @@
 
     - id: Switch
       branches:
-        - condition: (player.gradeBoost * 0.4 + player.learnBoost * 0.3 + player.academicIntention * 0.2 + player.healthBoost * 0.1) / 10 >= 8
+        - condition: (player.grade * 0.4 + player.learn * 0.3 + player.academicIntention * 0.2 + player.health * 0.1) / 10 >= 8
           actions:
             - id: DisplayMessage
               message: message.examExcellent
               confirm: message.great
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 12
-                player.learnBoost: player.learnBoost + 5
-                player.healthBoost: player.healthBoost + 3
+                player.grade: player.grade + 12
+                player.learn: player.learn + 5
+                player.health: player.health + 3
 
-        - condition: (player.gradeBoost * 0.4 + player.learnBoost * 0.3 + player.academicIntention * 0.2 + player.healthBoost * 0.1) / 10 >= 6
+        - condition: (player.grade * 0.4 + player.learn * 0.3 + player.academicIntention * 0.2 + player.health * 0.1) / 10 >=  6
           actions:
             - id: DisplayMessage
               message: message.examPassed
               confirm: message.ok
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 6
+                player.grade: player.grade + 6
 
         - condition: "true"
           actions:
@@ -325,8 +371,8 @@
               confirm: message.sucks
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost - 8
-                player.healthBoost: player.healthBoost - 2
+                player.grade: player.grade - 8
+                player.health: player.health - 2
 
 
 # SummerInternship
@@ -352,9 +398,9 @@
               confirm: message.great
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost + 3
-                player.learnBoost: player.learnBoost + 2
-                player.healthBoost: player.healthBoost + 1
+                player.grade: player.grade + 3
+                player.learn: player.learn + 2
+                player.health: player.health + 1
                 player.academicIntention: player.academicIntention + 2
             - id: Random
               condition: player.health < 75
@@ -367,11 +413,11 @@
                       confirm: message.excited
                     - id: UpdateVariables
                       updates:
-                        player.gradeBoost: player.gradeBoost - 5
+                        player.grade: player.grade - 5
                         player.academicIntention: player.academicIntention -3
                         player.technicIntention: player.technicIntention -3
-                        player.learnBoost: player.learnBoost - 7
-                        player.healthBoost: player.healthBoost - 5
+                        player.learn: player.learn - 7
+                        player.health: player.health - 5
 
         - message: message.goalRest
           confirm: message.ok
@@ -381,10 +427,10 @@
               confirm: message.cool
             - id: UpdateVariables
               updates:
-                player.gradeBoost: player.gradeBoost - 2
-                player.learnBoost: player.learnBoost - 2
-                player.healthBoost: player.healthBoost +8
-                player.EQBoost: player.EQBoost + 3      
+                player.grade: player.grade - 2
+                player.learn: player.learn - 2
+                player.health: player.health +8
+                player.EQ: player.EQ + 3      
         
         - message: message.choiceInternship
           confirm: message.ok
@@ -403,7 +449,7 @@
             - id: Switch
               branches:
                 #success
-                - condition: (player.technicIntention * 0.5 + player.learnBoost * 0.5 + player.EQBoost*0.1 + player.academicIntention*0.1 ) >= 75
+                - condition: (player.technicIntention + player.learn * 0.8 + player.EQ*0.1 + player.academicIntention*0.5 ) >= 60
                   probability: 0.75
                   actions:
                     - id: DisplayMessage
@@ -412,8 +458,8 @@
                     - id: UpdateVariables
                       updates:
                         player.technicIntention: player.technicIntention + 16
-                        player.healthBoost: player.healthBoost - 15
-                        player.EQBoost: player.EQBoost + 3
+                        player.health: player.health - 15
+                        player.EQ: player.EQ + 3
                         week: week+6
                     - id: SetStatus
                       statusId: successInternship
@@ -427,7 +473,7 @@
                     - id: UpdateVariables
                       updates:
                         player.technicIntention: player.technicIntention + 2
-                        player.healthBoost: player.healthBoost - 3
+                        player.health: player.health - 3
                         week: week +2
                     - id: SetStatus
                       statusId: failInternship
@@ -448,7 +494,7 @@
             - id: Switch
               branches:
                 # +
-                - condition: (player.academicIntention * 0.5 + player.learnBoost * 0.5 + player.EQBoost*0.1 + player.technicIntention*0.1 )  >= 75
+                - condition: (player.academicIntention  + player.learn * 0.8 + player.EQ*0.1 + player.technicIntention*0.4 )  >= 60
                   probability: 0.75
                   actions:
                     - id: DisplayMessage
@@ -457,8 +503,8 @@
                     - id: UpdateVariables
                       updates:
                         player.academicIntention: player.academicIntention + 16
-                        player.gradeBoost: player.gradeBoost + 8
-                        player.healthBoost: player.healthBoost - 15
+                        player.grade: player.grade + 8
+                        player.health: player.health - 15
                         week: week +6
                     - id: SetStatus
                       statusId: successResearch
@@ -472,8 +518,8 @@
                     - id: UpdateVariables
                       updates:
                         player.academicIntention: player.academicIntention + 8
-                        player.healthBoost: player.healthBoost - 15
-                        player.learnBoost: player.learnBoost -8
+                        player.health: player.health - 15
+                        player.learn: player.learn -8
                         week: week + 8
                     - id: SetStatus
                       statusId: failResearch
@@ -490,44 +536,7 @@
       message: message.newterm
       confirm: message.excited
 
-# lyingflat bounceback
-# - id: BounceBack
-#   trigger: WeekBegin
-#   probability: 0.2
-#   conditions:
-#     - id: Expression
-#       expression: hasStatus('rest') && player.healthBoost > 80
-#   actions:
-#     - id: DisplayMessage
-#       message: message.bounceBack
-#       confirm: message.encouraging
-#     - id: UpdateVariables
-#       updates:
-#         player.learnBoost: player.learnBoost + 8
-#         player.gradeBoost: player.gradeBoost + 3
 
-
-
-# game end:      
-# - id: EndReport
-#   trigger: GameEnd
-#   actions:
-#     - id: DisplayMessage
-#       message: message.endReport
-#       confirm: message.ok
-#     - id: AIGenerateReport
-#       prompt: |
-#         请根据以下玩家数据生成一份中文报告：
-#         - 学业成绩：{{ player.academic }}
-#         - 健康状态：{{ player.health }}
-#         - 社交活跃：{{ player.social }}
-#         - 科研投入：{{ player.research }}
-#         - 玩乐次数：{{ player.playCount }}
-#         - 实习经历：{{ player.internship }}
-#         要求写一段150字左右的《大学四年总结报告》，
-#         内容包括总体表现、性格特征、大学生活亮点和未来展望。
-#     - id: DisplayAIResult
-#       label: "你的大学总结报告如下："
 
 - id: GameEnd
   trigger: WeekBegin

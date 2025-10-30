@@ -11,9 +11,9 @@ ui.helpButton: Help
 ui.helpTitle: Help
 ui.helpContent: Simply make your choice at the beginning of each week. All outcomes are determined by the random number generator. Do not take them seriously. **Sometimes the RNG can be brutal.**
 ui.creditsButton: credits
-ui.health: "健康 {{player.healthBoost}}"
+ui.health: "健康 {{player.health}}"
 ui.timeMeter: "周:{{week}}"
-ui.learnBoost: "学习 {{player.learnBoost}}"
+ui.learn: "学习 {{player.learn}}"
 
 #item
 item.dailyQuote1: Stay hungry; stay foolish.
@@ -36,6 +36,7 @@ status.successResearch: "哦耶，开始尝试科研了。"
 status.failResearch: "哦不，研究有点失败。"
 status.burnout: "好累好累好累，注意休息！"
 status. FinaltermsPressure: "期末考了，要准备复习了。"
+status.tired: "有点疲惫，注意休息。"
 
 # beginning
 message.beginningCollege: "你背上行囊，踏入崭新的校园。晨光洒在林荫道上，心中既有憧憬，也有些忐忑。未来四年，将是成长、探索与挑战的旅程。每一个选择，都会塑造你的大学人生。准备好了吗？新篇章，现在开始！"
@@ -83,11 +84,11 @@ message.researchFailed: "研究进展不顺利，但也算有了新的体会。"
 
   
 message.bounceBack: "休息充足后，你重新找回了学习的动力！"
-message.burnout: "长时间高压学习让你感到筋疲力尽。"
+message.burnout: "长时间高压学习让你感到筋疲力尽！！！·。"
 message.newterm: "新的学期开始，你有什么新的计划？"
 
   #end
 message.endReport: "你的大学生活画上句号，AI正在生成你的总结报告……"
-message.end: "从迷茫的新生到逐渐找到方向，你经历了期中与期末的起伏，也在实习与科研之间做出抉择。或许有过摆烂，也有过拼尽全力，但这一年的努力与犹豫，都将成为你成长的注脚。新的篇章，才刚刚开始。。"
+message.end: "从迷茫的新生到逐渐找到方向，你经历了期中与期末的起伏，也在实习与科研之间做出抉择。或许有过摆烂，也有过拼尽全力，但这一年的努力与犹豫，都将成为你成长的注脚。新的篇章，才刚刚开始。"
 message.restart: "try aganin"
   

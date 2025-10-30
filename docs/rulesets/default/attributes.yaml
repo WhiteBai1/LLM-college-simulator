@@ -1,14 +1,14 @@
 ---
 attributes:
 - id: player.learnBoost
-  baseValue: 60
-- id: player.healthBoost
-  baseValue: 100
-- id: player.EQBoost
-  baseValue: 60
-- id: player.gradeBoost
-  baseValue: 60
-- id: player.academicIntention
   baseValue: 0
-- id: player.technicIntention
+- id: player.healthBoost
+  baseValue: 0
+- id: player.EQBoost
+  baseValue: 0
+- id: player.gradeBoost
+  baseValue: 0
+- id: player.academicIntentionBoost
+  baseValue: 0
+- id: player.technicIntentionBoost
   baseValue: 0
